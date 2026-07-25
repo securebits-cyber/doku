@@ -2,7 +2,7 @@
 title: "NIS2 und BSI"
 description: "Wie SentryMail Awareness-Anforderungen aus NIS2 und BSI IT-Grundschutz unterstützt."
 sidebar:
-  order: 4
+  order: 5
 ---
 
 Wie SentryMail Awareness-Anforderungen aus **NIS2** und dem **BSI IT-Grundschutz** unterstützt.

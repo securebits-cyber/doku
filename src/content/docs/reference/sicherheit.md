@@ -25,6 +25,8 @@ sidebar:
 
 - Erfasst wird nur, **dass** ein Empfänger geöffnet/geklickt/ein Formular abgeschickt hat (Awareness-Signal) — inkl. Zeitpunkt und IP.
 - **Eingegebene Formulardaten werden standardmäßig nicht gespeichert.** „Daten-Capture" und „Passwörter erfassen" sind pro Landing Page **opt-in** und sollten nur nach interner Freigabe (Datenschutz/Betriebsrat) genutzt werden.
+- **Client-Fingerprinting ist standardmäßig aus** und nur nach ausdrücklicher Admin-Entscheidung aktivierbar.
+- Für den mitbestimmten Betrieb gibt es darüber hinaus den **Datenschutz- und Mitbestimmungsmodus** mit Sperre für Einzelpersonen-Auswertungen, k-Anonymität, Vier-Augen-Freigabe und automatischer Anonymisierung — siehe [Datenschutz & Mitbestimmung](/reference/datenschutz/).
 
 ## Nachvollziehbarkeit
 
