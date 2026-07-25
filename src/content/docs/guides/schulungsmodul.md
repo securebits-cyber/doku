@@ -54,11 +54,37 @@ LMS_S3_SECRET_KEY=…
 Im Dashboard verwaltet ein Admin die Schulungen im **Schulungs-Bereich** (Enterprise). Typischer Ablauf:
 
 1. **Kurs anlegen** — Titel, Beschreibung und Sprache festlegen.
-2. **Video hochladen** — die Datei landet im konfigurierten Speicher-Backend (Dateisystem oder S3); es wird kein externer Dienst eingebunden.
+2. **Video hochladen** — die Datei landet im konfigurierten Speicher-Backend (Dateisystem oder S3); es wird kein externer Dienst eingebunden. Alternativ ein **SCORM-1.2-Paket** importieren (Beta, siehe unten).
 3. **Verständnis-Quiz hinterlegen** — Fragen mit Antwortoptionen und Bestehensgrenze definieren.
 4. **Bestehensregeln setzen** — erforderlicher Wiedergabe-Anteil des Videos plus Quiz-Ergebnis.
 
 Erst wenn die geforderte Wiedergabezeit **tatsächlich gesehen** und das Quiz bestanden wurde, gilt der Kurs als abgeschlossen.
+
+## SCORM-1.2-Pakete einbinden (Beta)
+
+:::caution[Beta]
+Die Funktion arbeitet, ist aber noch nicht mit einer Breite echter Autorenwerkzeuge erprobt. Vor dem Einsatz in einer Pflichtschulung mit dem eigenen Paket prüfen.
+:::
+
+Statt eines eigenen Videos kann ein Modul ein **SCORM-1.2-Paket** enthalten — ein ZIP-Archiv mit `imsmanifest.xml`. Damit lassen sich eingekaufte oder vorhandene Schulungen einbinden, statt sie selbst zu produzieren.
+
+**Ein Modul ist entweder ein Video oder ein SCORM-Paket.** Beides zugleich hätte zwei Fortschrittsquellen für denselben Abschluss — welche gilt, wäre im Audit nicht zu begründen.
+
+Der Import lehnt ab: SCORM 2004 (anderes Laufzeit-Datenmodell), ausführbare Dateien im Paket, Archive, die sich beim Entpacken stark aufblähen, Pakete über 500 MB oder 5000 Dateien und Pakete ohne vorhandenen Einstiegspunkt. Toleriert werden die Freiheiten echter Pakete: fehlender XML-Namensraum, `xml:base`, verschachtelte Gliederung, ein umschließender Ordner im ZIP.
+
+### Wo der Kursinhalt läuft
+
+Der Kurs läuft in einem abgeschotteten Rahmen **ohne `allow-same-origin`**. Kursinhalt ist fremdes JavaScript; käme er von derselben Herkunft wie SentryMail, könnte er das CSRF-Cookie lesen und mit der Sitzung der schulungspflichtigen Person beliebige Aufrufe machen.
+
+Der Preis: Pakete, die auf `localStorage` bestehen, laufen darin nicht — in einer undurchsichtigen Herkunft wirft der Zugriff.
+
+### Was der gemeldete Fortschritt wert ist
+
+:::note
+Der Kurs meldet seinen Bearbeitungsstand **selbst**. Das ist nicht manipulationssicher und kann es bei SCORM nicht sein: Was „bestanden" heißt, entscheidet der Inhalt, und der läuft im Browser der Person.
+:::
+
+Beim Video führt der Server die gesehenen Abschnitte selbst zusammen — das bleibt die belastbarere Quelle und wird durch SCORM nicht ersetzt. Für SCORM-Module wird die vom Kurs gemeldete **Bearbeitungszeit** mitgeführt und im Nachweis daneben ausgewiesen, damit ein „bestanden nach vier Sekunden" im Audit auffällt.
 
 ## Automatische Zuweisung nach Risiko
 
