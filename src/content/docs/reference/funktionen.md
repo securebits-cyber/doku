@@ -15,7 +15,6 @@ sidebar:
   - `{{ link }}` — personalisierter Tracking-Link zur Landing Page
   - Aliase: `{{ recipient_name }}`, `{{ recipient_email }}`, `{{ click_link }}`
 - **Vorschau** mit Beispieldaten.
-- **`.eml`-Import**: eine echte E-Mail hochladen — Betreff, HTML/Text und **Anhänge** werden übernommen.
 - **Anhänge** manuell hinzufügen/entfernen; werden mit der Kampagne versendet.
 
 ## Gruppen
@@ -23,7 +22,6 @@ sidebar:
 Wiederverwendbare Empfängerlisten. Empfänger hinzufügen per:
 - **manueller Eingabe** (E-Mail, Vor-/Nachname, Position),
 - **CSV** (Einfügen oder Datei),
-- **LDAP-Import** (sofern konfiguriert).
 
 ## Sending Profiles
 

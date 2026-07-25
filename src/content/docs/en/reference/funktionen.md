@@ -15,7 +15,6 @@ sidebar:
   - `{{ link }}` — personalized tracking link to the landing page
   - Aliases: `{{ recipient_name }}`, `{{ recipient_email }}`, `{{ click_link }}`
 - **Preview** with sample data.
-- **`.eml` import**: upload a real email — subject, HTML/text and **attachments** are taken over.
 - **Attachments** can be added/removed manually; they are sent with the campaign.
 
 ## Groups
@@ -23,7 +22,6 @@ sidebar:
 Reusable recipient lists. Add recipients via:
 - **manual entry** (email, first/last name, position),
 - **CSV** (paste or file),
-- **LDAP import** (if configured).
 
 ## Sending profiles
 
