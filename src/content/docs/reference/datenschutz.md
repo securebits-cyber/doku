@@ -117,7 +117,7 @@ Lesbar für Administratoren **und** den Datenschutzbeauftragten — eine Kontrol
 
 Im Repository liegen im Ordner `compliance/` vier Vorlagen, jeweils DE und EN:
 
-- **Muster-Betriebsvereinbarung** — dreizehn Paragraphen vom Ausschluss der Leistungskontrolle über das Vier-Augen-Verfahren und die Massen-Quarantäne bis zur Löschregel
+- **Muster-Betriebsvereinbarung** — vierzehn Paragraphen vom Ausschluss der Leistungskontrolle über das Vier-Augen-Verfahren und die Massen-Quarantäne bis zur Löschregel
 - **Datenschutz-Kurzdarstellung** — Information der Beschäftigten nach Art. 13 DSGVO in einfacher Sprache
 
 Beide beschreiben genau das, was die Software durchsetzt, und enthalten Platzhalter für die Werte der eigenen Instanz. Sie sind kein Rechtsrat und vor Abschluss arbeitsrechtlich zu prüfen.

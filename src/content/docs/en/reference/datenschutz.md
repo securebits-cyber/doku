@@ -117,7 +117,7 @@ Readable by administrators **and** the data protection officer — a control rol
 
 The repository contains four templates in the `compliance/` folder, each in German and English:
 
-- **Model works agreement** — thirteen sections, from excluding performance monitoring through the four-eyes procedure and mass quarantine to the deletion rule
+- **Model works agreement** — fourteen sections, from excluding performance monitoring through the four-eyes procedure and mass quarantine to the deletion rule
 - **Privacy overview** — employee information under Art. 13 GDPR in plain language
 
 Both describe exactly what the software enforces and contain placeholders for your instance's own values. They are not legal advice and should be reviewed by employment counsel before signing.

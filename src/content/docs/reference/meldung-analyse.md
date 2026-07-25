@@ -16,9 +16,46 @@ Beschäftigte melden eine verdächtige Mail, SentryMail wertet sie automatisch a
 
 ## Meldeweg
 
-Aktuell wird die gemeldete Mail als **`.eml`-Datei** unter *Gemeldete Mails* hochgeladen. Der **Mail-Report-Button** für Outlook und Thunderbird ist die vorgesehene Vorstufe, braucht aber ein Codesigning-Zertifikat mit mehreren Wochen Beschaffungsvorlauf. Wenn er kommt, liefert er in denselben Eingang — nur die Quelle ändert sich, nicht das Datenmodell.
+Es gibt zwei Wege in dieselbe Ablage:
+
+- **Mail-Report-Button** im Mailprogramm — der Weg für Beschäftigte. Ein Klick, fertig.
+- **`.eml`-Upload** unter *Gemeldete Mails* — für angemeldete Benutzer, etwa wenn eine Meldung per Umweg ankommt.
+
+Nur die Quelle unterscheidet sich, nicht das Datenmodell.
+
+### Der Button meldet ohne Konto
+
+Die meldenden Beschäftigten haben in aller Regel **kein** SentryMail-Konto — sie sind Empfänger, keine Benutzer. Ein Login im Add-in würde für jeden Melder ein Konto voraussetzen, das es nicht gibt, und niemand meldet, wenn er sich dafür erst anmelden muss.
+
+Deshalb authentifiziert sich die **Instanz** über ein Melde-Token, nicht der Mensch über ein Passwort. Eingerichtet wird das unter *Einstellungen → Mail-Report-Button*. Das Token liegt damit auf jedem Arbeitsplatz — das ist beim kontenlosen Meldeweg unvermeidlich und wird an drei Stellen eingegrenzt:
+
+| Grenze | Wirkung |
+|---|---|
+| Meldeweg abschaltbar | Ohne Aktivierung ist der Weg zu, auch wenn ein Token hinterlegt ist |
+| Erlaubte Absenderdomains | Ein abhandengekommenes Token kann Meldungen keinen fremden Adressen zuschreiben |
+| Meldungen je Person und Stunde | Ein abhandengekommenes Token kann die Ablage nicht volllaufen lassen |
+
+Ein neues Token macht das alte sofort wertlos. Ob die Kette steht, zeigt das Feld *Letzte Meldung* auf derselben Seite — beim Einrichten die einzige verlässliche Rückmeldung.
+
+### Drei Clients
+
+| Client | Zertifikat | Voraussetzung |
+|---|---|---|
+| **Thunderbird** (MailExtension) | keines | — |
+| **Outlook** (Office-Web-Add-in) | keines | Exchange oder Microsoft 365 |
+| **Outlook** (VSTO) | Codesigning, zum Testen selbstsigniert | reine IMAP-/POP-Konten |
+
+Für Outlook ist das **Web-Add-in der Standardweg**: SentryMail liefert das fertige Manifest mit eingetragener Adresse und Token selbst aus, verteilt wird es über das Microsoft 365 Admin Center bzw. die Exchange-Verwaltung. Das VSTO-Add-in ist der Ausweichweg für Postfächer ohne Exchange, wo Web-Add-ins nicht laufen — nur dieses eine braucht ein Zertifikat.
+
+Thunderbird braucht **kein** Zertifikat: Eine MailExtension ist ein XPI, und für die Verteilung gibt es die Signatur über addons.thunderbird.net (kostenlos), das Ausrollen per `policies.json` oder die abschaltbare Signaturpflicht.
+
+> **Die gemeldete Nachricht bleibt im Postfach stehen.** Sie beim Melden zu löschen wäre bevormundend und unnötig: Bestätigt sich der Angriff, holt die Massen-Quarantäne sie ohnehin aus *allen* Postfächern — und nicht nur bei der Person, die aufgepasst hat.
+
+### Was gespeichert wird
 
 **Die Originaldatei bleibt gespeichert.** Eine Analyse, die nur abgeleitete Felder kennt, ließe sich später nicht mit besseren Regeln wiederholen, und für die Vorfallsbehandlung ist das Original der eigentliche Beleg.
+
+> **Eine Ausnahme beim VSTO-Add-in:** Outlook bewahrt bei IMAP- und POP-Konten das eingegangene MIME nicht byteweise auf. Dort wird die `.eml` aus dem **vollständigen Original-Kopfzeilenblock** plus Inhalt und Anhängen zusammengesetzt. Die Bewertung stützt sich fast vollständig auf die Kopfzeilen, und die bleiben unverändert — byteidentisch ist es aber nicht. Über Exchange (Web-Add-in) und in Thunderbird schon.
 
 **Mehrfachmeldungen zählen hoch, statt Duplikate anzulegen.** Erkannt wird das über den SHA-256 der Rohbytes. Eine Welle wird typischerweise von vielen gleichzeitig gemeldet; die Meldungszahl ist das erste grobe Signal für ihren Umfang.
 
@@ -146,7 +183,7 @@ Der Zugriff auf fremde Postfächer ist der weitreichendste Eingriff des Produkts
 
 ## Noch nicht enthalten
 
-- **Mail-Report-Button** — wartet auf das Codesigning-Zertifikat.
+- **VSTO-Add-in für Outlook ohne Exchange** — Quelltext liegt vor, ist aber noch nicht unter Windows kompiliert und getestet. Es ist der einzige Client, der ein Codesigning-Zertifikat braucht.
 
 ---
 

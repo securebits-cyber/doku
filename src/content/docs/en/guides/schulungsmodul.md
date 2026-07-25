@@ -54,11 +54,37 @@ LMS_S3_SECRET_KEY=…
 In the dashboard, an admin manages training in the **training area** (Enterprise). A typical flow:
 
 1. **Create a course** — set title, description and language.
-2. **Upload a video** — the file lands in the configured storage backend (filesystem or S3); no external service is involved.
+2. **Upload a video** — the file lands in the configured storage backend (filesystem or S3); no external service is involved. Alternatively import a **SCORM 1.2 package** (beta, see below).
 3. **Add a comprehension quiz** — define questions with answer options and a pass mark.
 4. **Set pass rules** — required watched share of the video plus quiz result.
 
 Only once the required playback time has been **actually watched** and the quiz passed does the course count as completed.
+
+## Embedding SCORM 1.2 packages (beta)
+
+:::caution[Beta]
+The feature works but has not been tried against a breadth of real authoring tools. Test it with your own package before using it for mandatory training.
+:::
+
+Instead of your own video, a module can hold a **SCORM 1.2 package** — a ZIP archive with an `imsmanifest.xml`. This lets you embed purchased or existing training instead of producing it yourself.
+
+**A module is either a video or a SCORM package.** Both at once would mean two sources of progress for the same completion — which one counts could not be justified in an audit.
+
+The import refuses: SCORM 2004 (different runtime data model), executables inside the package, archives that expand disproportionately, packages over 500 MB or 5000 files, and packages without a present entry point. Tolerated are the liberties real packages take: missing XML namespace, `xml:base`, nested organisation trees, a wrapping folder inside the ZIP.
+
+### Where the course content runs
+
+The course runs in a sandboxed frame **without `allow-same-origin`**. Course content is third-party JavaScript; if it came from the same origin as SentryMail it could read the CSRF cookie and make arbitrary calls with the session of the person being trained.
+
+The price: packages that insist on `localStorage` do not run in it — access throws in an opaque origin.
+
+### What the reported progress is worth
+
+:::note
+The course reports its own progress. That is not tamper-proof and cannot be with SCORM: what "passed" means is decided by the content, which runs in the person's browser.
+:::
+
+For video the server merges the segments actually watched — that remains the more solid source and is not replaced by SCORM. For SCORM modules the **working time** reported by the course is carried along and shown alongside it in the evidence, so a "passed after four seconds" stands out in an audit.
 
 ## Automatic risk-based assignment
 
@@ -73,6 +99,31 @@ The LMS ties into **human risk management** ([Features → Tracking & results](/
 - Each assignment has a **deadline** for completion.
 - **Reminders** are sent before the deadline.
 - Once exceeded, an **overdue escalation** kicks in (e.g. a notice to responsible parties); overdue training is visible in the reporting.
+
+## xAPI export to a Learning Record Store
+
+Anyone already running an LRS does not want awareness training evidenced separately from the rest of their training records. Under **Settings → xAPI export** you enter the address of the xAPI endpoint (1.0.3) plus user/password or a token.
+
+Reported are **assignment**, **progress** and **completion**, each with course, module and the course version — so the record in the LRS names the same revision as the one in SentryMail.
+
+> **Only training events are exported.** Phishing simulation events stay out of it. Sending a "clicked" to a foreign store would be exactly the individual-person evaluation privacy mode exists to prevent — and the LRS knows nothing of its locks.
+
+### Who appears in the LRS
+
+| Identifier | Meaning |
+|---|---|
+| **Pseudonym** (default) | An instance-wide stable identifier that cannot be reversed. The LRS can join a person's history without knowing who that person is |
+| **Email address** | Names and addresses leave the instance |
+
+The more restrained setting is the default: an LRS is a **further recipient of personal data**. Anyone who needs the real names there switches it on deliberately — the change is written to the audit log, belongs in an agreement with the employee representation, and into the processing register.
+
+### Delivery
+
+Statements are **stored first and delivered afterwards**. An LRS is a system of record; a statement lost to a network error would be missing there permanently. If delivery fails the scheduler retries — up to five times, after which the statement stays visibly parked rather than letting the queue grow silently. The statement UUID stays the same across all attempts so the LRS recognises a retry and creates no duplicate.
+
+Pending and parked statements are shown on the settings page; **Send now** triggers delivery by hand and retries parked ones too — the usual case after corrected credentials.
+
+Whatever happened **before** you switched it on is not sent retrospectively: a queue filling up while the export is off would ship the entire past to the LRS the moment it is enabled, and nobody expects that.
 
 ## Certificates & records
 

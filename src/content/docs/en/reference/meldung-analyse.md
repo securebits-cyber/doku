@@ -16,9 +16,46 @@ Employees report a suspicious mail, SentryMail evaluates it automatically and gr
 
 ## Reporting path
 
-For now the reported mail is uploaded as an **`.eml` file** under *Reported mails*. The **mail report button** for Outlook and Thunderbird is the intended precursor, but it needs a codesigning certificate with several weeks of procurement lead time. When it arrives it will deliver into the same intake — only the source changes, not the data model.
+There are two routes into the same store:
+
+- **Mail report button** in the mail client — the route for employees. One click, done.
+- **`.eml` upload** under *Reported mails* — for signed-in users, for instance when a report arrives by a detour.
+
+Only the source differs, not the data model.
+
+### The button reports without an account
+
+The employees doing the reporting generally have **no** SentryMail account — they are recipients, not users. A login in the add-in would require an account for every reporter that does not exist, and nobody reports if they have to sign in first.
+
+So the **instance** authenticates with a report token rather than the person with a password. You set this up under *Settings → Mail report button*. The token therefore sits on every workstation — unavoidable with an accountless reporting path, and bounded in three places:
+
+| Bound | Effect |
+|---|---|
+| The path can be switched off | Without activation the path is closed even when a token is stored |
+| Allowed sender domains | A leaked token cannot attribute reports to foreign addresses |
+| Reports per person and hour | A leaked token cannot fill up the store |
+
+A new token makes the old one worthless immediately. Whether the chain works shows in the *Last report* field on the same page — during setup the only reliable confirmation.
+
+### Three clients
+
+| Client | Certificate | Requirement |
+|---|---|---|
+| **Thunderbird** (MailExtension) | none | — |
+| **Outlook** (Office web add-in) | none | Exchange or Microsoft 365 |
+| **Outlook** (VSTO) | codesigning, self-signed for testing | plain IMAP/POP accounts |
+
+For Outlook the **web add-in is the default route**: SentryMail serves the ready-made manifest with address and token already filled in, and you distribute it via the Microsoft 365 admin center or Exchange administration. The VSTO add-in is the fallback for mailboxes without Exchange, where web add-ins do not run — that one alone needs a certificate.
+
+Thunderbird needs **no** certificate: a MailExtension is an XPI, and for distribution there is signing via addons.thunderbird.net (free), rollout through `policies.json`, or the signature requirement you can switch off.
+
+> **The reported message stays in the mailbox.** Deleting it on reporting would be patronising and unnecessary: if the attack is confirmed, mass quarantine takes it out of *every* mailbox anyway — not just the one belonging to the person who paid attention.
+
+### What is stored
 
 **The original file is kept.** An analysis that only knows derived fields could not be repeated later with better rules, and for incident handling the original is the actual evidence.
+
+> **One exception with the VSTO add-in:** Outlook does not preserve the received MIME byte for byte on IMAP and POP accounts. There the `.eml` is assembled from the **complete original header block** plus body and attachments. The score rests almost entirely on the headers, and those stay unchanged — but it is not byte-identical. Via Exchange (web add-in) and in Thunderbird it is.
 
 **Repeated reports count up instead of creating duplicates**, detected via the SHA-256 of the raw bytes. A wave is typically reported by many people at once; the report count is the first rough signal of its scale.
 
@@ -146,7 +183,7 @@ Accessing other people's mailboxes is the most far-reaching action this product 
 
 ## Not yet included
 
-- **Mail report button** — waiting for the codesigning certificate.
+- **VSTO add-in for Outlook without Exchange** — the source is complete but has not yet been compiled and tested on Windows. It is the only client that needs a codesigning certificate.
 
 ---
 

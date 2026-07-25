@@ -54,11 +54,37 @@ LMS_S3_SECRET_KEY=…
 Im Dashboard verwaltet ein Admin die Schulungen im **Schulungs-Bereich** (Enterprise). Typischer Ablauf:
 
 1. **Kurs anlegen** — Titel, Beschreibung und Sprache festlegen.
-2. **Video hochladen** — die Datei landet im konfigurierten Speicher-Backend (Dateisystem oder S3); es wird kein externer Dienst eingebunden.
+2. **Video hochladen** — die Datei landet im konfigurierten Speicher-Backend (Dateisystem oder S3); es wird kein externer Dienst eingebunden. Alternativ ein **SCORM-1.2-Paket** importieren (Beta, siehe unten).
 3. **Verständnis-Quiz hinterlegen** — Fragen mit Antwortoptionen und Bestehensgrenze definieren.
 4. **Bestehensregeln setzen** — erforderlicher Wiedergabe-Anteil des Videos plus Quiz-Ergebnis.
 
 Erst wenn die geforderte Wiedergabezeit **tatsächlich gesehen** und das Quiz bestanden wurde, gilt der Kurs als abgeschlossen.
+
+## SCORM-1.2-Pakete einbinden (Beta)
+
+:::caution[Beta]
+Die Funktion arbeitet, ist aber noch nicht mit einer Breite echter Autorenwerkzeuge erprobt. Vor dem Einsatz in einer Pflichtschulung mit dem eigenen Paket prüfen.
+:::
+
+Statt eines eigenen Videos kann ein Modul ein **SCORM-1.2-Paket** enthalten — ein ZIP-Archiv mit `imsmanifest.xml`. Damit lassen sich eingekaufte oder vorhandene Schulungen einbinden, statt sie selbst zu produzieren.
+
+**Ein Modul ist entweder ein Video oder ein SCORM-Paket.** Beides zugleich hätte zwei Fortschrittsquellen für denselben Abschluss — welche gilt, wäre im Audit nicht zu begründen.
+
+Der Import lehnt ab: SCORM 2004 (anderes Laufzeit-Datenmodell), ausführbare Dateien im Paket, Archive, die sich beim Entpacken stark aufblähen, Pakete über 500 MB oder 5000 Dateien und Pakete ohne vorhandenen Einstiegspunkt. Toleriert werden die Freiheiten echter Pakete: fehlender XML-Namensraum, `xml:base`, verschachtelte Gliederung, ein umschließender Ordner im ZIP.
+
+### Wo der Kursinhalt läuft
+
+Der Kurs läuft in einem abgeschotteten Rahmen **ohne `allow-same-origin`**. Kursinhalt ist fremdes JavaScript; käme er von derselben Herkunft wie SentryMail, könnte er das CSRF-Cookie lesen und mit der Sitzung der schulungspflichtigen Person beliebige Aufrufe machen.
+
+Der Preis: Pakete, die auf `localStorage` bestehen, laufen darin nicht — in einer undurchsichtigen Herkunft wirft der Zugriff.
+
+### Was der gemeldete Fortschritt wert ist
+
+:::note
+Der Kurs meldet seinen Bearbeitungsstand **selbst**. Das ist nicht manipulationssicher und kann es bei SCORM nicht sein: Was „bestanden" heißt, entscheidet der Inhalt, und der läuft im Browser der Person.
+:::
+
+Beim Video führt der Server die gesehenen Abschnitte selbst zusammen — das bleibt die belastbarere Quelle und wird durch SCORM nicht ersetzt. Für SCORM-Module wird die vom Kurs gemeldete **Bearbeitungszeit** mitgeführt und im Nachweis daneben ausgewiesen, damit ein „bestanden nach vier Sekunden" im Audit auffällt.
 
 ## Automatische Zuweisung nach Risiko
 
@@ -73,6 +99,31 @@ Das LMS knüpft an das **Human Risk Management** an ([Funktionen → Tracking & 
 - Je Zuweisung gilt eine **Frist** bis zum Abschluss.
 - Vor Fristablauf werden **Erinnerungen** versendet.
 - Nach Überschreiten greift eine **Overdue-Eskalation** (z. B. Hinweis an Verantwortliche); überfällige Schulungen sind im Reporting sichtbar.
+
+## xAPI-Export an einen Learning Record Store
+
+Wer bereits einen LRS betreibt, will die Awareness-Schulung nicht getrennt vom Rest der Weiterbildung nachweisen. Unter **Einstellungen → xAPI-Export** wird die Adresse der xAPI-Schnittstelle (1.0.3) eingetragen, dazu Benutzer/Passwort oder ein Token.
+
+Gemeldet werden **Zuweisung**, **Bearbeitung** und **Abschluss**, jeweils mit Kurs, Modul und der Kursversion — der Nachweis im LRS nennt damit denselben Stand wie der in SentryMail.
+
+> **Exportiert werden ausschließlich Schulungsereignisse.** Ereignisse der Phishing-Simulation bleiben außen vor. Ein „hat geklickt" an einen fremden Speicher zu senden wäre genau die Einzelpersonen-Auswertung, die der Datenschutzmodus verhindern soll — und der LRS kennt dessen Sperren nicht.
+
+### Wer im LRS steht
+
+| Kennung | Bedeutung |
+|---|---|
+| **Pseudonym** (Voreinstellung) | Instanzweit stabile, nicht zurückrechenbare Kennung. Der LRS kann Verläufe je Person zusammenführen, ohne zu wissen, wer dahintersteht |
+| **E-Mail-Adresse** | Klarnamen und Adressen verlassen die Instanz |
+
+Die zurückhaltendere Einstellung ist die Voreinstellung: Ein LRS ist ein **weiterer Empfänger personenbezogener Daten**. Wer die Klarnamen dort braucht, schaltet das bewusst ein — die Umstellung wird im Audit-Log protokolliert, gehört mit der Interessenvertretung abgestimmt und ins Verarbeitungsverzeichnis.
+
+### Zustellung
+
+Statements werden **erst gespeichert und dann zugestellt**. Ein LRS ist ein Nachweissystem; ein Statement, das bei einem Netzwerkfehler verlorengeht, fehlt dort dauerhaft. Misslingt die Zustellung, versucht der Scheduler es erneut — bis zu fünfmal, danach bleibt das Statement sichtbar liegen, statt die Warteschlange still wachsen zu lassen. Die Statement-UUID bleibt über alle Versuche gleich, damit der LRS eine Wiederholung erkennt und kein Duplikat anlegt.
+
+Offene und liegengebliebene Statements stehen auf der Einstellungsseite; **Jetzt nachreichen** stößt die Zustellung von Hand an und versucht auch Liegengebliebenes erneut — der übliche Fall nach einer korrigierten Zugangsdatenangabe.
+
+Was **vor** dem Einschalten passiert ist, wird nicht nachträglich verschickt: Eine Warteschlange, die sich bei abgeschaltetem Export füllt, würde beim Einschalten die gesamte Vergangenheit an den LRS schicken, und damit rechnet niemand.
 
 ## Zertifikate & Nachweise
 
