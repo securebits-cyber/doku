@@ -108,9 +108,44 @@ A hit weighs 70 points: the indicators come from incidents the organisation cura
 
 ---
 
+## Mass quarantine
+
+Once a wave is confirmed, the best analysis is worthless while the mail still sits in hundreds of mailboxes. Mass quarantine takes it out of them — **moved into a quarantine folder, never deleted**. A mistake therefore stays correctable; the message remains in the affected person's mailbox, just not in the inbox.
+
+Both common environments are supported: **Microsoft 365** via the Graph API and **Postfix/Dovecot** via the doveadm HTTP API. You set one of them up under *Settings → Quarantine*; without a selection SentryMail touches no mailbox at all.
+
+### The search is by Message-ID only
+
+A wave's subject also appears in legitimate replies and forwards — searching by it would sweep up other people's mail. The search therefore uses the reported message's **Message-ID** only. Reports without a Message-ID cannot be quarantined; that is the intended consequence.
+
+### The dry run is mandatory
+
+The process has two steps and cannot be shortened:
+
+1. **Dry run** — searches all mailboxes for the message and shows where it sits. Nothing is changed. The result is stored as a record.
+2. **Execution** — refers to exactly that stored run and moves the messages found.
+
+Without a stored dry run there is nothing to execute, and executing an already executed run is refused. This is not an on-screen warning you can click away but the structure of the interface.
+
+> **A locked mailbox does not abort the run.** With a thousand mailboxes one of them is always unreachable. Aborting would leave the remaining findings in place — the error is therefore recorded per mailbox and the run continues.
+
+### Permissions
+
+| Environment | What is needed |
+|---|---|
+| Microsoft 365 | App registration with the `Mail.ReadWrite` application permission |
+| Postfix/Dovecot | doveadm HTTP API with an account allowed to run `doveadm move` |
+
+On Microsoft 365 that permission initially covers **every** mailbox. Restrict it to the scope you actually need via an [application access policy](https://learn.microsoft.com/graph/auth-limit-mailbox-access).
+
+### Co-determination
+
+Accessing other people's mailboxes is the most far-reaching action this product performs. Agree it with the employee representation before putting it into service — the template under `compliance/` names it explicitly. Every dry run and every execution is written to the audit log with count, subject and the person who triggered it; the runs themselves are kept as evidence.
+
+---
+
 ## Not yet included
 
-- **Mass quarantine** via the Graph API or Postfix/Dovecot — deliberately postponed to a later release. Intervening in other people's mailboxes is the most far-reaching step of this wave and needs its own agreement, including with the employee representation.
 - **Mail report button** — waiting for the codesigning certificate.
 
 ---

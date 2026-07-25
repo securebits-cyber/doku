@@ -109,6 +109,7 @@ Readable by administrators **and** the data protection officer — a control rol
 - **Instance-wide totals stay visible.** An installation with three recipients still shows "3 recipients, 2 clicks". That is the entire population, not a group.
 - **The automatic training assignment still sees the risk list** (Enterprise). It displays that list to nobody and only assigns courses — without this named exception the mode would have silently switched the assignment off. That assignment constitutes monitoring of conduct under § 87(1) no. 6 BetrVG and belongs in the works agreement.
 - **The audit log contains the names and IP addresses of the acting administrators.** It documents the procedure, not the conduct of employees.
+- **Mass quarantine is not covered by this mode** (Enterprise). It accesses mailboxes rather than campaign data and serves incident handling — a different purpose. It is the most far-reaching action the product performs and belongs in the works agreement as its own item: who may trigger it, at what scope, and how it is accounted for. The software enforces a dry run beforehand, only moves (never deletes) and logs both steps. See [Reporting and analysis](/en/reference/meldung-analyse/).
 - **Anonymisation cannot be undone.** After it, even a subject access request under Art. 15 GDPR can no longer be answered — not an omission but the purpose of the rule.
 :::
 
@@ -116,7 +117,7 @@ Readable by administrators **and** the data protection officer — a control rol
 
 The repository contains four templates in the `compliance/` folder, each in German and English:
 
-- **Model works agreement** — twelve sections, from excluding performance monitoring through the four-eyes procedure to the deletion rule
+- **Model works agreement** — thirteen sections, from excluding performance monitoring through the four-eyes procedure and mass quarantine to the deletion rule
 - **Privacy overview** — employee information under Art. 13 GDPR in plain language
 
 Both describe exactly what the software enforces and contain placeholders for your instance's own values. They are not legal advice and should be reviewed by employment counsel before signing.
