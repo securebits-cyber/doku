@@ -108,9 +108,44 @@ Ein Treffer wiegt 70 Punkte: Die Indikatoren stammen aus Vorfällen, die die Org
 
 ---
 
+## Massen-Quarantäne
+
+Ist eine Welle bestätigt, hilft die beste Analyse nichts, solange die Mail in hunderten Postfächern liegt. Die Massen-Quarantäne holt sie dort heraus — **verschoben in einen Quarantäne-Ordner, nie gelöscht**. Ein Fehlgriff bleibt damit korrigierbar; die Nachricht liegt weiter im Postfach der betroffenen Person, nur nicht mehr im Posteingang.
+
+Unterstützt werden beide verbreiteten Umgebungen: **Microsoft 365** über die Graph API und **Postfix/Dovecot** über die doveadm-HTTP-API. Eingerichtet wird eines davon unter *Einstellungen → Quarantäne*; ohne Auswahl greift SentryMail auf kein Postfach zu.
+
+### Gesucht wird nur nach der Message-ID
+
+Der Betreff einer Welle taucht auch in legitimen Antworten und Weiterleitungen darauf auf — eine Suche danach würde fremde Post mit einsammeln. Gesucht wird deshalb ausschließlich nach der **Message-ID** der gemeldeten Nachricht. Meldungen ohne Message-ID lassen sich nicht quarantänisieren; das ist die gewollte Konsequenz.
+
+### Der Probelauf ist Pflicht
+
+Der Ablauf ist zweistufig und lässt sich nicht abkürzen:
+
+1. **Probelauf** — sucht die Nachricht in allen Postfächern und zeigt, wo sie liegt. Es wird nichts verändert. Das Ergebnis wird als Datensatz gespeichert.
+2. **Ausführung** — bezieht sich auf genau diesen gespeicherten Lauf und verschiebt die gefundenen Nachrichten.
+
+Ohne gespeicherten Probelauf gibt es nichts auszuführen; die Ausführung eines bereits ausgeführten Laufs wird abgelehnt. Das ist keine Bildschirmwarnung, die sich wegklicken lässt, sondern die Struktur der Schnittstelle.
+
+> **Ein gesperrtes Postfach bricht den Lauf nicht ab.** Bei tausend Postfächern ist immer eines nicht erreichbar. Ein Abbruch würde die übrigen Funde stehen lassen — der Fehler wird deshalb je Postfach vermerkt und der Lauf fortgesetzt.
+
+### Berechtigungen
+
+| Umgebung | Was gebraucht wird |
+|---|---|
+| Microsoft 365 | App-Registrierung mit der Anwendungsberechtigung `Mail.ReadWrite` |
+| Postfix/Dovecot | doveadm-HTTP-API mit einem Konto, das `doveadm move` ausführen darf |
+
+Bei Microsoft 365 gilt diese Berechtigung zunächst für **alle** Postfächer. Sie sollte über eine [Anwendungszugriffsrichtlinie](https://learn.microsoft.com/graph/auth-limit-mailbox-access) auf den nötigen Umfang begrenzt werden.
+
+### Mitbestimmung
+
+Der Zugriff auf fremde Postfächer ist der weitreichendste Eingriff des Produkts. Er gehört vor der Inbetriebnahme mit der Interessenvertretung abgestimmt — die Vorlage unter `compliance/` benennt ihn ausdrücklich. Jeder Probelauf und jede Ausführung landet mit Anzahl, Betreff und auslösender Person im Audit-Log; die Läufe selbst bleiben als Beleg erhalten.
+
+---
+
 ## Noch nicht enthalten
 
-- **Massen-Quarantäne** über Graph API bzw. Postfix/Dovecot — bewusst auf ein späteres Release verschoben. Der Eingriff in fremde Postfächer ist der weitreichendste Schritt dieser Welle und braucht eine eigene Abstimmung, auch mit der Interessenvertretung.
 - **Mail-Report-Button** — wartet auf das Codesigning-Zertifikat.
 
 ---

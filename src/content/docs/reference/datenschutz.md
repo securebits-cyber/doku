@@ -109,6 +109,7 @@ Lesbar für Administratoren **und** den Datenschutzbeauftragten — eine Kontrol
 - **Gesamtzahlen der Instanz bleiben sichtbar.** Eine Installation mit drei Empfängern zeigt weiterhin „3 Empfänger, 2 Klicks". Das ist die Gesamtpopulation und keine Gruppe.
 - **Die automatische Schulungszuweisung sieht die Risikoliste weiterhin** (Enterprise). Sie zeigt sie niemandem an, sondern ordnet nur Schulungen zu — ohne diese benannte Ausnahme hätte der Modus die Zuweisung stillschweigend abgeschaltet. Die Zuweisung ist eine Verhaltenskontrolle nach § 87 Abs. 1 Nr. 6 BetrVG und gehört in die Betriebsvereinbarung.
 - **Das Audit-Log enthält Klarnamen und IP-Adressen der handelnden Administratoren.** Es dokumentiert das Verfahren, nicht das Verhalten der Beschäftigten.
+- **Die Massen-Quarantäne fällt nicht unter diesen Modus** (Enterprise). Sie greift auf Postfächer zu, nicht auf Kampagnendaten, und dient der Vorfallsbehandlung — ein anderer Zweck. Sie ist der weitreichendste Eingriff des Produkts und gehört als eigener Punkt in die Betriebsvereinbarung: Wer darf auslösen, in welchem Umfang, und wie wird es nachgehalten. Die Software erzwingt einen Probelauf vorab, verschiebt nur (löscht nie) und protokolliert beide Schritte. Siehe [Meldung und Analyse](/reference/meldung-analyse/).
 - **Die Anonymisierung ist nicht umkehrbar.** Danach kann auch ein Auskunftsersuchen nach Art. 15 DSGVO nicht mehr beantwortet werden — kein Versäumnis, sondern der Zweck der Regel.
 :::
 
@@ -116,7 +117,7 @@ Lesbar für Administratoren **und** den Datenschutzbeauftragten — eine Kontrol
 
 Im Repository liegen im Ordner `compliance/` vier Vorlagen, jeweils DE und EN:
 
-- **Muster-Betriebsvereinbarung** — zwölf Paragraphen vom Ausschluss der Leistungskontrolle über das Vier-Augen-Verfahren bis zur Löschregel
+- **Muster-Betriebsvereinbarung** — dreizehn Paragraphen vom Ausschluss der Leistungskontrolle über das Vier-Augen-Verfahren und die Massen-Quarantäne bis zur Löschregel
 - **Datenschutz-Kurzdarstellung** — Information der Beschäftigten nach Art. 13 DSGVO in einfacher Sprache
 
 Beide beschreiben genau das, was die Software durchsetzt, und enthalten Platzhalter für die Werte der eigenen Instanz. Sie sind kein Rechtsrat und vor Abschluss arbeitsrechtlich zu prüfen.
