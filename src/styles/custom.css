@@ -122,15 +122,15 @@ site-search button[data-open-modal] {
 	border-radius: 1rem;
 }
 
-/* --- Bühne der Startseite: weichgezeichneter Produkt-Screenshot ------------
-   Das Bild ist bereits weichgezeichnet ausgeliefert (public/hero-banner.webp)
-   statt per CSS-Filter: Ein unscharfes Bild komprimiert um ein Vielfaches
-   besser — 5 kB statt 780 kB — und der Browser muss beim Scrollen nichts
-   filtern.
+/* --- Bühne der Startseite --------------------------------------------------
+   Der Produkt-Screenshot steht als Bild **neben** dem Text (Hero-Bild in der
+   Frontmatter), nicht unscharf dahinter. Ein Bild hinter der Schrift zwingt zu
+   einem kräftigen Schleier, sonst leidet die Lesbarkeit — und dann sieht man
+   vom Produkt ohnehin nichts mehr.
 
-   Darüber liegt in beiden Themes ein Verlauf. Ohne den wäre die Schrift auf
-   dem hellen Screenshot im Dark Mode praktisch unlesbar; die Lesbarkeit
-   entscheidet hier, nicht die Bildwirkung. */
+   Der Browser-Rahmen um den Screenshot ist ins Bild gerechnet: Starlights Hero
+   rendert ein schlichtes <img>, und alles, was darum herum liegen soll, müsste
+   sich an dessen interne Struktur klammern. */
 .hero {
 	position: relative;
 	isolation: isolate;
@@ -139,43 +139,53 @@ site-search button[data-open-modal] {
 .hero::before {
 	content: '';
 	position: absolute;
-	/* Etwas über die Ränder hinaus, damit die Bühne nicht wie ein Kasten
-	   wirkt — aber bewusst nicht über die Viewport-Breite: Ein absolut
-	   positioniertes Element mit -50vw erzeugt auf schmalen Fenstern einen
-	   waagerechten Scrollbalken, und der wäre schlimmer als ein etwas
-	   schmalerer Banner. */
 	inset: -4rem -2.5rem -2rem;
 	z-index: -1;
-	background-image:
-		linear-gradient(
-			to bottom,
-			color-mix(in srgb, var(--sl-color-black) 82%, transparent),
-			color-mix(in srgb, var(--sl-color-black) 94%, transparent)
-		),
-		url('/hero-banner.webp');
-	background-size: cover;
-	background-position: center 20%;
-	/* Nach unten auslaufen lassen, statt hart abzuschneiden. */
-	mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
-	-webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+	/* Warmer Schimmer aus der Akzentfarbe, von rechts oben auslaufend — dieselbe
+	   Richtung, aus der das Bild kommt. */
+	background: radial-gradient(
+		120% 105% at 78% 12%,
+		color-mix(in srgb, var(--sl-color-accent) 16%, transparent) 0%,
+		transparent 62%
+	);
+	mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
 }
 
-/* Light Mode: Der Screenshot ist selbst hell, hier genügt ein warmer,
-   deutlich hellerer Schleier — sonst verschwindet die dunkle Schrift. */
+/* Im hellen Theme darf der Schimmer kräftiger sein: Er liegt auf Weiß und
+   trägt dort die Wirkung, die im Dark Mode schon der Hintergrund liefert. */
 :root[data-theme='light'] .hero::before {
-	background-image:
-		linear-gradient(
-			to bottom,
-			color-mix(in srgb, var(--sl-color-white) 88%, transparent),
-			color-mix(in srgb, var(--sl-color-white) 96%, transparent)
-		),
-		url('/hero-banner.webp');
+	background: radial-gradient(
+		120% 105% at 78% 12%,
+		color-mix(in srgb, var(--sl-color-accent) 22%, transparent) 0%,
+		transparent 64%
+	);
 }
 
-/* Ohne Verlaufs-Unterstützung (ältere Browser) bleibt die Fläche einfarbig —
-   lieber kein Bild als unlesbare Schrift. */
-@supports not (background-image: linear-gradient(#000, #000)) {
-	.hero::before {
-		display: none;
+/* Das Hero-Bild trägt seinen Schatten selbst — Starlights Standardrahmen würde
+   sich mit dem eingerechneten Browser-Fenster beißen. */
+.hero > img,
+.hero .hero-html img {
+	border-radius: 0;
+	box-shadow: none;
+	background: none;
+}
+
+/* Starlight deckelt das Hero-Bild bei 25rem. Ein Produkt-Screenshot ist darin
+   nicht mehr zu erkennen; ab der zweispaltigen Ansicht darf er die Hälfte der
+   Bühne einnehmen — so wie im Entwurf. */
+.hero .hero-html {
+	width: 100%;
+	max-width: none;
+}
+
+.hero .hero-html img {
+	width: 100%;
+	height: auto;
+}
+
+@media (min-width: 50rem) {
+	.hero .hero-html {
+		width: min(100%, 44rem);
 	}
 }
