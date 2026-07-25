@@ -25,6 +25,8 @@ Overview of SentryMail's security mechanisms and recommendations for operation.
 
 - Only recorded is **that** a recipient opened/clicked/submitted a form (awareness signal) — including time and IP.
 - **Submitted form data is not stored by default.** "Data capture" and "capture passwords" are **opt-in** per landing page and should only be used after internal approval (data protection/works council).
+- **Client fingerprinting is off by default** and can only be enabled by an explicit administrator decision.
+- For workplaces with employee representation there is also the **data protection and co-determination mode** with a lock on individual-person evaluations, k-anonymity, four-eyes unlocking and automatic anonymisation — see [Data protection & co-determination](/en/reference/datenschutz/).
 
 ## Traceability
 

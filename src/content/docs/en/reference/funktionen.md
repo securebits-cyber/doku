@@ -53,8 +53,22 @@ A wizard combines **template + sending profile + landing page + recipient groups
 
 ## Users & roles
 
-- Roles **Admin** and **User**. Admins manage settings and accounts.
+- Roles **Admin**, **Data protection officer** and **User**. Admins manage settings and accounts.
+- The **data protection officer** is a control role: they decide on unlock requests and read the audit log, but do not evaluate and do not change settings.
 - 2FA status visible per user; admins can reset 2FA.
+
+## Data protection & co-determination
+
+Part of the open core, off by default, enabled under **Settings → Privacy**:
+
+- **Lock on individual-person evaluations** — enforced server-side, including against admins.
+- **k-anonymity** for group evaluations (default 5); smaller groups are marked "below threshold" instead of being dropped.
+- **Four-eyes unlocking** for temporary exceptions: requested by an admin, decided by the data protection officer, never by oneself.
+- **Retention period** with automatic anonymisation; without a period nothing is deleted.
+- **Client fingerprinting** only after an explicit admin opt-in (off by default).
+- **Templates** for a works agreement and a privacy overview (German/English) in the `compliance/` folder.
+
+In detail: [Data protection & co-determination](/en/reference/datenschutz/)
 
 ## Business edition (add-on)
 

@@ -53,8 +53,22 @@ Assistent kombiniert **Vorlage + Sending Profile + Landing Page + Empfängergrup
 
 ## Benutzer & Rollen
 
-- Rollen **Admin** und **Benutzer**. Admins verwalten Einstellungen und Konten.
+- Rollen **Admin**, **Datenschutzbeauftragter** und **Benutzer**. Admins verwalten Einstellungen und Konten.
+- Der **Datenschutzbeauftragte** ist eine Kontrollrolle: er entscheidet über Freigaben und liest das Audit-Log, wertet aber nicht aus und ändert keine Einstellungen.
 - 2FA-Status je Nutzer sichtbar; Admins können 2FA zurücksetzen.
+
+## Datenschutz & Mitbestimmung
+
+Bestandteil des Open Core, standardmäßig ausgeschaltet, unter **Einstellungen → Datenschutz** aktivierbar:
+
+- **Sperre für Einzelpersonen-Auswertungen** — serverseitig erzwungen, auch gegenüber Admins.
+- **k-Anonymität** für Gruppenauswertungen (Standard 5); kleinere Gruppen werden als „unter Schwellenwert" ausgewiesen statt weggelassen.
+- **Vier-Augen-Freigabe** zur befristeten Aufhebung: beantragt vom Admin, entschieden vom Datenschutzbeauftragten, niemals selbst.
+- **Aufbewahrungsfrist** mit automatischer Anonymisierung; ohne gesetzte Frist wird nichts gelöscht.
+- **Client-Fingerprinting** nur nach ausdrücklicher Admin-Freigabe (Standard aus).
+- **Vorlagen** für Betriebsvereinbarung und Datenschutz-Kurzdarstellung (DE/EN) im Ordner `compliance/`.
+
+Ausführlich: [Datenschutz & Mitbestimmung](/reference/datenschutz/)
 
 ## Business-Edition (Add-on)
 
