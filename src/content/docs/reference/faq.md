@@ -2,7 +2,7 @@
 title: "FAQ"
 description: "Häufig gestellte Fragen zu SentryMail."
 sidebar:
-  order: 6
+  order: 7
 ---
 
 **Was ist SentryMail?**
