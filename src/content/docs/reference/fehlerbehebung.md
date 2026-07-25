@@ -2,7 +2,7 @@
 title: "Fehlerbehebung"
 description: "Häufige Probleme im Betrieb und ihre Lösung."
 sidebar:
-  order: 7
+  order: 8
 ---
 
 Häufige Probleme im Betrieb und ihre Lösung. Siehe auch [Konfiguration](/guides/konfiguration/) und [Installation](/guides/installation/).

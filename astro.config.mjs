@@ -61,6 +61,7 @@ export default defineConfig({
 							{ icon: 'i-ph:stack-duotone', slug: 'reference/architektur' },
 							{ icon: 'i-ph:shield-check-duotone', slug: 'reference/sicherheit' },
 							{ icon: 'i-ph:user-circle-check-duotone', slug: 'reference/datenschutz' },
+							{ icon: 'i-ph:siren-duotone', slug: 'reference/meldung-analyse' },
 							{ icon: 'i-ph:seal-check-duotone', slug: 'reference/nis2-und-bsi' },
 							{ icon: 'i-ph:question-duotone', slug: 'reference/faq' },
 							{ icon: 'i-ph:wrench-duotone', slug: 'reference/fehlerbehebung' },

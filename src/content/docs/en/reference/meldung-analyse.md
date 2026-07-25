@@ -1,0 +1,105 @@
+---
+title: "Reporting & analysis"
+description: "Report suspicious emails, analyse them automatically and group them into waves."
+sidebar:
+  order: 5
+---
+
+Employees report a suspicious mail, SentryMail evaluates it automatically and groups similar reports into waves. This turns the product from an awareness tool into a supplier for incident handling under NIS2 Art. 21(2)(b).
+
+| Building block | Edition |
+|---|---|
+| Reporting path (intake, storage, deduplication) | **Business** |
+| Automatic analysis, waves, attachment scanning | **Enterprise** |
+
+---
+
+## Reporting path
+
+For now the reported mail is uploaded as an **`.eml` file** under *Reported mails*. The **mail report button** for Outlook and Thunderbird is the intended precursor, but it needs a codesigning certificate with several weeks of procurement lead time. When it arrives it will deliver into the same intake — only the source changes, not the data model.
+
+**The original file is kept.** An analysis that only knows derived fields could not be repeated later with better rules, and for incident handling the original is the actual evidence.
+
+**Repeated reports count up instead of creating duplicates**, detected via the SHA-256 of the raw bytes. A wave is typically reported by many people at once; the report count is the first rough signal of its scale.
+
+All roles may report — otherwise nobody does.
+
+> **Relationship to privacy mode:** the lock on individual-person evaluations deliberately does **not** apply here. It protects against evaluating employees' behaviour in awareness simulations; a reported phishing mail is incident handling and therefore a different purpose. Who reported it is stored — without that link you could neither follow up nor inform the reporter. See [Data protection & co-determination](/en/reference/datenschutz/).
+
+---
+
+## Automatic analysis
+
+Every report is evaluated on arrival. Expanding the row shows the result.
+
+### Authentication
+
+SPF, DKIM and DMARC are read from the receiving server's `Authentication-Results` header — **no own check**: it would need to know the DNS state at the time of receipt and would be neither reliable nor meaningful after the fact.
+
+If the header is missing, the value reads **"not stated"**, not "passed". The difference between *checked and passed* and *not checkable* is decisive during triage.
+
+### Sender inconsistencies
+
+| Finding | Meaning |
+|---|---|
+| `display_name_spoofing` | The display name states an address other than the actual sender — the most common trick |
+| `reply_to_mismatch` | A reply would go to a foreign domain |
+| `return_path_mismatch` | The return path differs from the sender |
+
+### Addresses
+
+URLs contained in the mail are stored and displayed **defanged** (`hxxp://`, `[.]`) and are never linked. When reviewing a phishing mail nobody should end up on the attacker's site through a misclick — and no mail client or ticket system should turn the address back into a link.
+
+### Attachments
+
+Name, type, size and **SHA-256** are recorded. Executable extensions (`.exe`, `.js`, `.hta`, `.lnk` …) reach the *high* level on their own: the mail was already flagged as suspicious by a human, and a legitimate executable attachment is the rare exception. Archives weigh less because they are often harmless.
+
+### Scoring
+
+The score is **rule-based and explainable**. Every finding carries its rule, its weight and a reason — anyone questioning the score sees immediately where it comes from. A black-box score would be worthless for incident handling.
+
+---
+
+## Waves
+
+Reports sharing a normalised subject and sender domain form a **wave**. Reply and forward prefixes (`AW:`, `Re:`, `Fwd:`) are stripped so they cannot tear the same wave apart.
+
+Deliberately **not** the full sender address: attackers vary the local part (`no-reply`, `service`, `info`) within an identical wave. And deliberately not the content — a single personalised salutation would make every mail unique, leaving the clustering with nothing to group.
+
+The list sits at the top of the *Reported mails* page, sorted by report count: the most widely spread wave comes first.
+
+---
+
+## Attachment scanning with ClamAV
+
+**Optional and self-hosted.** Under *Settings → Attachment scanning* you point the instance at a ClamAV on your own network (default port 3310). Attachments never leave the instance — there is deliberately no cloud lookup.
+
+Example for the compose stack:
+
+```yaml
+services:
+  clamav:
+    image: clamav/clamav:stable
+    restart: unless-stopped
+    networks: [humanshield]
+```
+
+> **If the scanner is unreachable, attachments count as "not scanned" — never as clean.** A false all-clear would be the most dangerous message this module could produce.
+
+The *Test connection* button sends the **EICAR test pattern**. Only when the scanner reports the test detection is the chain demonstrably working — a mere TCP connection would not prove that.
+
+A detection weighs 100 points and lifts the report to *high* immediately.
+
+**YARA** is intended but not yet included: it needs rules the operator supplies, and without them the feature would be an empty promise. The attachment hashes are already collected so a second checker can be added without a schema change.
+
+---
+
+## Not yet included
+
+- **Mass quarantine** via the Graph API or Postfix/Dovecot — deliberately postponed to a later release. Intervening in other people's mailboxes is the most far-reaching step of this wave and needs its own agreement, including with the employee representation.
+- **MISP enrichment** — planned as an **optional** add-on: without your own MISP instance everything else works unchanged. External feeds remain opt-in and switchable per instance as a matter of principle.
+- **Mail report button** — waiting for the codesigning certificate.
+
+---
+
+*See also: [Data protection & co-determination](/en/reference/datenschutz/) · [Features](/en/reference/funktionen/) · [NIS2 & BSI](/en/reference/nis2-und-bsi/)*

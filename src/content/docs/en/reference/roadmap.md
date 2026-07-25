@@ -2,7 +2,7 @@
 title: "Roadmap"
 description: "Implemented feature set and planned extensions."
 sidebar:
-  order: 8
+  order: 9
 ---
 
 The documented feature set is implemented: the **open-core** and the paid **Business** and **Enterprise add-ons** are available. See [Features](/en/reference/funktionen/) for the full list.

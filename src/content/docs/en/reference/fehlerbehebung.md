@@ -2,7 +2,7 @@
 title: "Troubleshooting"
 description: "Common operational problems and how to solve them."
 sidebar:
-  order: 7
+  order: 8
 ---
 
 Common operational problems and their fixes. See also [Configuration](/en/guides/konfiguration/) and [Installation](/en/guides/installation/).

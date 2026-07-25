@@ -2,7 +2,7 @@
 title: "Roadmap"
 description: "Umgesetzter Funktionsumfang und geplante Erweiterungen."
 sidebar:
-  order: 8
+  order: 9
 ---
 
 Der dokumentierte Funktionsumfang ist umgesetzt: der **Open-Core-Kern** sowie die kostenpflichtigen **Business-** und **Enterprise-Add-ons** sind verfügbar. Die vollständige Auflistung findest du unter [Funktionen](/reference/funktionen/).
