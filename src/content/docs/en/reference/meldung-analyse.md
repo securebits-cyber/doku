@@ -94,10 +94,23 @@ A detection weighs 100 points and lifts the report to *high* immediately.
 
 ---
 
+## MISP enrichment
+
+**Entirely optional.** Anyone without a MISP instance only loses this section — everything else works unchanged. There is no cloud substitute and no mandatory lookup.
+
+Under *Settings → MISP* you enter the URL and a read-access API key of your **own** instance. The indicators a report yields are queried: the SHA-256 of attachments, the contained addresses (in their original form, not defanged) and the sender domain.
+
+> **Only the self-hosted instance entered here is queried.** Whether it pulls external feeds is its operator's decision. SentryMail never queries a third-party service on its own — a mandatory cloud lookup would undermine the self-hosting proposition.
+
+A hit weighs 70 points: the indicators come from incidents the organisation curated itself and are therefore more solid than any heuristic.
+
+> **If the instance is unreachable it reads "check not possible" — not "nothing known".** The same rule as for attachment scanning: a failed check must never look like a completed one.
+
+---
+
 ## Not yet included
 
 - **Mass quarantine** via the Graph API or Postfix/Dovecot — deliberately postponed to a later release. Intervening in other people's mailboxes is the most far-reaching step of this wave and needs its own agreement, including with the employee representation.
-- **MISP enrichment** — planned as an **optional** add-on: without your own MISP instance everything else works unchanged. External feeds remain opt-in and switchable per instance as a matter of principle.
 - **Mail report button** — waiting for the codesigning certificate.
 
 ---

@@ -94,10 +94,23 @@ Ein Fund wiegt 100 Punkte und hebt die Meldung sofort auf *hoch*.
 
 ---
 
+## MISP-Anreicherung
+
+**Vollständig optional.** Wer keine MISP-Instanz betreibt, verliert nur diesen Abschnitt — alles Übrige funktioniert unverändert. Es gibt keinen Ersatzdienst in der Cloud und keinen Pflicht-Abgleich.
+
+Unter *Einstellungen → MISP* werden URL und ein API-Schlüssel mit Leserechten der **eigenen** Instanz eingetragen. Abgefragt werden die Indikatoren, die eine Meldung hergibt: die SHA-256 der Anhänge, die enthaltenen Adressen (im Original, nicht entschärft) und die Absenderdomain.
+
+> **Abgefragt wird ausschließlich die eingetragene, selbst betriebene Instanz.** Ob diese externe Feeds einbindet, entscheidet ihr Betreiber. SentryMail fragt von sich aus nie einen fremden Dienst — eine Pflicht-Cloud-Abfrage würde den Self-Hosting-Anspruch aushebeln.
+
+Ein Treffer wiegt 70 Punkte: Die Indikatoren stammen aus Vorfällen, die die Organisation selbst gepflegt hat, und sind damit belastbarer als jede Heuristik.
+
+> **Ist die Instanz nicht erreichbar, steht dort „Abgleich nicht möglich" — nicht „nichts bekannt".** Dieselbe Regel wie bei der Anhang-Prüfung: Ein ausgefallener Abgleich darf nie wie ein geprüftes Ergebnis aussehen.
+
+---
+
 ## Noch nicht enthalten
 
 - **Massen-Quarantäne** über Graph API bzw. Postfix/Dovecot — bewusst auf ein späteres Release verschoben. Der Eingriff in fremde Postfächer ist der weitreichendste Schritt dieser Welle und braucht eine eigene Abstimmung, auch mit der Interessenvertretung.
-- **MISP-Anreicherung** — geplant als **optionale** Zuschaltung: Ohne eigene MISP-Instanz funktioniert alles Übrige unverändert. Externe Feeds bleiben laut Grundsatzentscheidung Opt-in und pro Instanz abschaltbar.
 - **Mail-Report-Button** — wartet auf das Codesigning-Zertifikat.
 
 ---
