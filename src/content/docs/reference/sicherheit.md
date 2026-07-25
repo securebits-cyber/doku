@@ -18,8 +18,38 @@ sidebar:
 
 - **Laufzeit-Zugangsdaten** (SMTP der Sending Profiles und des Fallback-SMTP, LDAP-Bind-Passwort, OIDC-Client-Secret, TOTP-Secret): verschlüsselt **at-rest via Fernet**, Schlüssel abgeleitet aus `SECRET_KEY`.
 - Solche Secrets werden über die API **nie im Klartext** zurückgegeben — nur ein `has_*`-Flag.
-- **Betreiber-Secrets** (`SECRET_KEY`, DB-Passwort): ausschließlich über `.env`, nie im Code, nie ins Repo.
+- **Betreiber-Secrets** (`SECRET_KEY`, DB-Passwort): über `.env` — nie im Code, nie ins Repo.
 - **Backup-Codes** werden nur als **Hash** gespeichert; ein verbrauchter Code wird entwertet.
+
+### Secrets aus einem Secrets-Manager
+
+Eine `.env`-Datei ist der einfachste Weg und für viele Installationen ausreichend. Wer einen **Secrets-Manager** betreibt, kann die Betreiber-Secrets von dort beziehen, ohne dass SentryMail dafür etwas mitbringen muss: Die Anwendung liest sie als Umgebungsvariablen, und woher die kommen, entscheidet der Betrieb.
+
+**Das ist bewusst keine Integration.** Einen bestimmten Anbieter fest einzubauen würde jeden Betreiber in dessen Werkzeug zwingen — dieselbe Überlegung wie beim SMTP-Versand und beim SMS-Gateway. Alle folgenden Wege funktionieren ohne Änderung an der Anwendung.
+
+**Bitwarden Secrets Manager** — die CLI legt die Secrets als Umgebungsvariablen an:
+
+```bash
+bws run --project-id <PROJEKT> -- docker compose up -d
+```
+
+**HashiCorp Vault** — mit der Agent-Vorlage in eine `.env` schreiben oder direkt injizieren:
+
+```bash
+vault agent -config=agent.hcl     # rendert .env aus einer Template-Datei
+# oder, ohne Datei auf der Platte:
+export SECRET_KEY="$(vault kv get -field=secret_key secret/sentrymail)"
+```
+
+**Infisical, 1Password, AWS/GCP Secret Manager** — funktionieren nach demselben Muster (`infisical run --`, `op run --`, Sidecar oder Init-Container).
+
+**Docker Swarm oder Kubernetes** — dort sind Secrets Bordmittel; im Compose-Betrieb geht auch `secrets:` mit `*_FILE`-Variablen, sofern die eingesetzten Images das unterstützen.
+
+Worauf es unabhängig vom Werkzeug ankommt:
+
+- **`SECRET_KEY` ist der Schlüssel zu allen at-rest verschlüsselten Zugangsdaten.** Geht er verloren, sind SMTP-, LDAP-, OIDC- und Gateway-Zugangsdaten unlesbar und müssen neu eingegeben werden. Er gehört gesichert wie ein Backup — und ein Backup der Datenbank ohne ihn ist nur die halbe Wiederherstellung.
+- **Ein Wechsel des `SECRET_KEY` entwertet die verschlüsselten Felder.** Vor einer Rotation die betroffenen Zugangsdaten notieren und danach neu setzen.
+- **`.env` mit `chmod 600`**, falls sie doch verwendet wird — und niemals committen.
 
 ## Datensparsamkeit beim Tracking
 

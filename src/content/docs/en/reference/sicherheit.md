@@ -18,8 +18,38 @@ Overview of SentryMail's security mechanisms and recommendations for operation.
 
 - **Runtime credentials** (SMTP of the sending profiles and the fallback SMTP, LDAP bind password, OIDC client secret, TOTP secret): encrypted **at rest via Fernet**, key derived from `SECRET_KEY`.
 - Such secrets are **never returned in plain text** via the API — only a `has_*` flag.
-- **Operator secrets** (`SECRET_KEY`, DB password): exclusively via `.env`, never in code, never in the repo.
+- **Operator secrets** (`SECRET_KEY`, DB password): via `.env` — never in code, never in the repo.
 - **Backup codes** are stored only as a **hash**; a used code is invalidated.
+
+### Secrets from a secrets manager
+
+A `.env` file is the simplest route and sufficient for many installations. If you run a **secrets manager**, the operator secrets can come from there without SentryMail needing to ship anything for it: the application reads them as environment variables, and where those come from is an operations decision.
+
+**This is deliberately not an integration.** Building in one specific vendor would force every operator into that tool — the same reasoning as for SMTP delivery and the SMS gateway. All of the routes below work without any change to the application.
+
+**Bitwarden Secrets Manager** — the CLI provides the secrets as environment variables:
+
+```bash
+bws run --project-id <PROJECT> -- docker compose up -d
+```
+
+**HashiCorp Vault** — render a `.env` with the agent template, or inject directly:
+
+```bash
+vault agent -config=agent.hcl     # renders .env from a template file
+# or, without a file on disk:
+export SECRET_KEY="$(vault kv get -field=secret_key secret/sentrymail)"
+```
+
+**Infisical, 1Password, AWS/GCP Secret Manager** — same pattern (`infisical run --`, `op run --`, sidecar or init container).
+
+**Docker Swarm or Kubernetes** — secrets are built in there; under plain Compose you can also use `secrets:` with `*_FILE` variables, provided the images in use support them.
+
+What matters regardless of the tool:
+
+- **`SECRET_KEY` is the key to every credential encrypted at rest.** Lose it and the SMTP, LDAP, OIDC and gateway credentials become unreadable and have to be entered again. Protect it like a backup — and a database backup without it is only half a restore.
+- **Changing `SECRET_KEY` invalidates the encrypted fields.** Note the affected credentials before a rotation and set them again afterwards.
+- **`chmod 600` on `.env`** if you do use one — and never commit it.
 
 ## Data minimization in tracking
 
