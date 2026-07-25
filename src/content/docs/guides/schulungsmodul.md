@@ -100,6 +100,31 @@ Das LMS knüpft an das **Human Risk Management** an ([Funktionen → Tracking & 
 - Vor Fristablauf werden **Erinnerungen** versendet.
 - Nach Überschreiten greift eine **Overdue-Eskalation** (z. B. Hinweis an Verantwortliche); überfällige Schulungen sind im Reporting sichtbar.
 
+## xAPI-Export an einen Learning Record Store
+
+Wer bereits einen LRS betreibt, will die Awareness-Schulung nicht getrennt vom Rest der Weiterbildung nachweisen. Unter **Einstellungen → xAPI-Export** wird die Adresse der xAPI-Schnittstelle (1.0.3) eingetragen, dazu Benutzer/Passwort oder ein Token.
+
+Gemeldet werden **Zuweisung**, **Bearbeitung** und **Abschluss**, jeweils mit Kurs, Modul und der Kursversion — der Nachweis im LRS nennt damit denselben Stand wie der in SentryMail.
+
+> **Exportiert werden ausschließlich Schulungsereignisse.** Ereignisse der Phishing-Simulation bleiben außen vor. Ein „hat geklickt" an einen fremden Speicher zu senden wäre genau die Einzelpersonen-Auswertung, die der Datenschutzmodus verhindern soll — und der LRS kennt dessen Sperren nicht.
+
+### Wer im LRS steht
+
+| Kennung | Bedeutung |
+|---|---|
+| **Pseudonym** (Voreinstellung) | Instanzweit stabile, nicht zurückrechenbare Kennung. Der LRS kann Verläufe je Person zusammenführen, ohne zu wissen, wer dahintersteht |
+| **E-Mail-Adresse** | Klarnamen und Adressen verlassen die Instanz |
+
+Die zurückhaltendere Einstellung ist die Voreinstellung: Ein LRS ist ein **weiterer Empfänger personenbezogener Daten**. Wer die Klarnamen dort braucht, schaltet das bewusst ein — die Umstellung wird im Audit-Log protokolliert, gehört mit der Interessenvertretung abgestimmt und ins Verarbeitungsverzeichnis.
+
+### Zustellung
+
+Statements werden **erst gespeichert und dann zugestellt**. Ein LRS ist ein Nachweissystem; ein Statement, das bei einem Netzwerkfehler verlorengeht, fehlt dort dauerhaft. Misslingt die Zustellung, versucht der Scheduler es erneut — bis zu fünfmal, danach bleibt das Statement sichtbar liegen, statt die Warteschlange still wachsen zu lassen. Die Statement-UUID bleibt über alle Versuche gleich, damit der LRS eine Wiederholung erkennt und kein Duplikat anlegt.
+
+Offene und liegengebliebene Statements stehen auf der Einstellungsseite; **Jetzt nachreichen** stößt die Zustellung von Hand an und versucht auch Liegengebliebenes erneut — der übliche Fall nach einer korrigierten Zugangsdatenangabe.
+
+Was **vor** dem Einschalten passiert ist, wird nicht nachträglich verschickt: Eine Warteschlange, die sich bei abgeschaltetem Export füllt, würde beim Einschalten die gesamte Vergangenheit an den LRS schicken, und damit rechnet niemand.
+
 ## Zertifikate & Nachweise
 
 - Nach bestandenem Kurs erzeugt das LMS einen **revisionssicheren Schulungs-Nachweis** als PDF mit **Integritäts-Hash** zur Fälschungssicherung.

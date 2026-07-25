@@ -100,6 +100,31 @@ The LMS ties into **human risk management** ([Features → Tracking & results](/
 - **Reminders** are sent before the deadline.
 - Once exceeded, an **overdue escalation** kicks in (e.g. a notice to responsible parties); overdue training is visible in the reporting.
 
+## xAPI export to a Learning Record Store
+
+Anyone already running an LRS does not want awareness training evidenced separately from the rest of their training records. Under **Settings → xAPI export** you enter the address of the xAPI endpoint (1.0.3) plus user/password or a token.
+
+Reported are **assignment**, **progress** and **completion**, each with course, module and the course version — so the record in the LRS names the same revision as the one in SentryMail.
+
+> **Only training events are exported.** Phishing simulation events stay out of it. Sending a "clicked" to a foreign store would be exactly the individual-person evaluation privacy mode exists to prevent — and the LRS knows nothing of its locks.
+
+### Who appears in the LRS
+
+| Identifier | Meaning |
+|---|---|
+| **Pseudonym** (default) | An instance-wide stable identifier that cannot be reversed. The LRS can join a person's history without knowing who that person is |
+| **Email address** | Names and addresses leave the instance |
+
+The more restrained setting is the default: an LRS is a **further recipient of personal data**. Anyone who needs the real names there switches it on deliberately — the change is written to the audit log, belongs in an agreement with the employee representation, and into the processing register.
+
+### Delivery
+
+Statements are **stored first and delivered afterwards**. An LRS is a system of record; a statement lost to a network error would be missing there permanently. If delivery fails the scheduler retries — up to five times, after which the statement stays visibly parked rather than letting the queue grow silently. The statement UUID stays the same across all attempts so the LRS recognises a retry and creates no duplicate.
+
+Pending and parked statements are shown on the settings page; **Send now** triggers delivery by hand and retries parked ones too — the usual case after corrected credentials.
+
+Whatever happened **before** you switched it on is not sent retrospectively: a queue filling up while the export is off would ship the entire past to the LRS the moment it is enabled, and nobody expects that.
+
 ## Certificates & records
 
 - After passing a course, the LMS generates an **audit-proof training record** as a PDF with an **integrity hash** to prevent forgery.
