@@ -113,13 +113,17 @@ The list sits at the top of the *Reported mails* page, sorted by report count: t
 
 Example for the compose stack:
 
-```yaml
-services:
-  clamav:
-    image: clamav/clamav:stable
-    restart: unless-stopped
-    networks: [humanshield]
+ClamAV ships as a **compose profile** and is therefore off by default:
+
+```bash
+docker compose --profile scanning up -d
 ```
+
+Then enter host `clamav`, port 3310 under *Settings → Attachment scanning*.
+
+> **Why not always on:** `clamd` keeps the whole signature database in memory — 1.5 to 2 GB in practice. Running it always would raise the minimum requirement of every installation, including the many that never receive a report.
+
+In installations **without internet access** `freshclam` cannot reach the signatures and the database ages silently. There, either point it at an internal mirror or leave the check off — an outdated signature database is worse than none, because it feigns security.
 
 > **If the scanner is unreachable, attachments count as "not scanned" — never as clean.** A false all-clear would be the most dangerous message this module could produce.
 
@@ -127,7 +131,43 @@ The *Test connection* button sends the **EICAR test pattern**. Only when the sca
 
 A detection weighs 100 points and lifts the report to *high* immediately.
 
-**YARA** is intended but not yet included: it needs rules the operator supplies, and without them the feature would be an empty promise. The attachment hashes are already collected so a second checker can be added without a schema change.
+---
+
+## Attachment scanning with YARA
+
+A second, independent checker alongside ClamAV. Both run side by side and give separate verdicts: ClamAV detects known malware by signature, YARA detects **patterns the operator describes themselves** — macros with certain calls, say, or the marks of a campaign currently running against your own organisation.
+
+### The operator brings the rules
+
+The rules directory ships **empty**, and that is deliberate. A rule set is a substantive statement about what counts as suspicious; shipping one would mean making that statement on every operator's behalf.
+
+There is also the licensing situation: the most widely used free collection (`signature-base` by Florian Roth) is licensed **CC BY-NC** and may not be shipped inside a commercial product. Other collections mix licences. Anyone adding rules should do so deliberately and with an eye on their licence.
+
+### Setting it up
+
+Put rule files (`.yar`, `.yara`) in a directory and mount it into the backend container:
+
+```yaml
+services:
+  backend:
+    environment:
+      ENTERPRISE_YARA_RULES_DIR: /rules
+    volumes:
+      - ./yara-rules:/rules:ro
+```
+
+Subdirectories are read as well. Changes take effect **without a restart** — the rules are recompiled as soon as something in the directory changes.
+
+### Behaviour on failure
+
+| Situation | Result |
+|---|---|
+| No rules directory, or empty | "not scanned" — **not** "clean" |
+| A single rule file broken | The remaining rules keep working; the error is named |
+| All rules broken | "not scanned" |
+| Match | A finding worth 70 points, lifting the report to *high* |
+
+One broken rule does not topple the whole set — otherwise the operator is left searching in the dark. A match weighs less than a ClamAV detection (100 points): the rule comes from your own organisation and may be drawn more broadly than a virus signature.
 
 ---
 

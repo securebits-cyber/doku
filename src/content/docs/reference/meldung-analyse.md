@@ -113,13 +113,17 @@ Die Liste steht oben auf der Seite *Gemeldete Mails*, sortiert nach Zahl der Mel
 
 Beispiel für den Compose-Stack:
 
-```yaml
-services:
-  clamav:
-    image: clamav/clamav:stable
-    restart: unless-stopped
-    networks: [humanshield]
+ClamAV liegt als **Compose-Profil** bei und ist damit im Auslieferungszustand aus:
+
+```bash
+docker compose --profile scanning up -d
 ```
+
+Danach unter *Einstellungen → Anhang-Prüfung* Host `clamav`, Port 3310 eintragen.
+
+> **Warum nicht immer an:** `clamd` hält die Signaturdatenbank vollständig im Speicher — real 1,5 bis 2 GB. Immer mitzulaufen würde die Mindestanforderung jeder Installation anheben, auch der vielen, die nie eine Mail melden.
+
+In Installationen **ohne Internet** kommt `freshclam` nicht an die Signaturen, und die Datenbank veraltet still. Dort entweder einen internen Spiegel einbinden oder die Prüfung ausgeschaltet lassen — eine veraltete Signaturdatenbank ist schlimmer als keine, weil sie Sicherheit vortäuscht.
 
 > **Ist der Scanner nicht erreichbar, gelten Anhänge als „nicht geprüft" — niemals als sauber.** Eine falsche Entwarnung wäre die gefährlichste Meldung, die dieses Modul erzeugen könnte.
 
@@ -127,7 +131,43 @@ Die Schaltfläche *Verbindung prüfen* schickt das **EICAR-Testmuster**. Erst we
 
 Ein Fund wiegt 100 Punkte und hebt die Meldung sofort auf *hoch*.
 
-**YARA** ist vorgesehen, aber noch nicht enthalten: Es braucht Regeln, die der Betreiber selbst mitbringt, und ohne die wäre das Feature eine leere Zusage. Die Anhang-Hashes werden bereits erhoben, damit ein zweiter Prüfer sich ohne Schemaänderung ergänzen lässt.
+---
+
+## Anhang-Prüfung mit YARA
+
+Ein zweiter, unabhängiger Prüfer neben ClamAV. Beide laufen nebeneinander und liefern getrennte Aussagen: ClamAV erkennt bekannte Schadsoftware anhand von Signaturen, YARA erkennt **Muster, die der Betreiber selbst beschreibt** — etwa Makros mit bestimmten Aufrufen oder Kennzeichen einer Kampagne, die gerade im eigenen Haus läuft.
+
+### Die Regeln bringt der Betreiber mit
+
+Das Regelverzeichnis ist im Auslieferungszustand **leer**, und das ist Absicht. Ein Regelsatz ist eine inhaltliche Aussage darüber, was als verdächtig gilt; ihn mitzuliefern hieße, diese Aussage für jeden Betreiber zu treffen.
+
+Dazu kommt die Lizenzlage: Die verbreitetste freie Sammlung (`signature-base` von Florian Roth) steht unter **CC BY-NC** und darf in einem kostenpflichtigen Produkt nicht mitgeliefert werden. Andere Sammlungen mischen Lizenzen. Wer Regeln einbindet, soll das bewusst und mit Blick auf deren Lizenz tun.
+
+### Einrichten
+
+Regeldateien (`.yar`, `.yara`) in ein Verzeichnis legen und in den Backend-Container einhängen:
+
+```yaml
+services:
+  backend:
+    environment:
+      ENTERPRISE_YARA_RULES_DIR: /rules
+    volumes:
+      - ./yara-rules:/rules:ro
+```
+
+Unterverzeichnisse werden mitgelesen. Änderungen greifen **ohne Neustart** — die Regeln werden neu übersetzt, sobald sich im Verzeichnis etwas ändert.
+
+### Verhalten im Fehlerfall
+
+| Lage | Ergebnis |
+|---|---|
+| Kein Regelverzeichnis oder leer | „nicht geprüft" — **nicht** „sauber" |
+| Einzelne Regeldatei fehlerhaft | Die übrigen Regeln laufen weiter; der Fehler wird benannt |
+| Alle Regeln fehlerhaft | „nicht geprüft" |
+| Treffer | Befund mit 70 Punkten, hebt die Meldung auf *hoch* |
+
+Eine einzelne kaputte Regel kippt nicht den ganzen Satz — sonst sucht der Betreiber im Dunkeln. Ein Treffer wiegt weniger als ein ClamAV-Fund (100 Punkte): Die Regel stammt aus dem eigenen Haus und kann breiter gefasst sein als eine Virensignatur.
 
 ---
 
