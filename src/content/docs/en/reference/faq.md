@@ -19,7 +19,7 @@ A self-hosted open-core platform for phishing awareness: plan, send and evaluate
 <details>
 <summary>Does the tool make me "compliant"?</summary>
 
-No — it *supports* awareness measures and their evidence. See [NIS2 & BSI](/en/reference/nis2-und-bsi/).
+No — it *supports* awareness measures and their evidence. See [Compliance mapping](/en/reference/compliance/).
 
 </details>
 

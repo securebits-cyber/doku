@@ -19,7 +19,7 @@ Eine selbstgehostete Open-Core-Plattform für Phishing-Awareness: simulierte Phi
 <details>
 <summary>Macht mich das Tool „compliant"?</summary>
 
-Nein — es *unterstützt* Awareness-Maßnahmen und deren Nachweis. Siehe [NIS2 und BSI](/reference/nis2-und-bsi/).
+Nein — es *unterstützt* Awareness-Maßnahmen und deren Nachweis. Siehe [Compliance-Einordnung](/reference/compliance/).
 
 </details>
 

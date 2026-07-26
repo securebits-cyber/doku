@@ -227,4 +227,4 @@ Der Zugriff auf fremde Postfächer ist der weitreichendste Eingriff des Produkts
 
 ---
 
-*Siehe auch: [Datenschutz & Mitbestimmung](/reference/datenschutz/) · [Funktionen](/reference/funktionen/) · [NIS2 und BSI](/reference/nis2-und-bsi/)*
+*Siehe auch: [Datenschutz & Mitbestimmung](/reference/datenschutz/) · [Funktionen](/reference/funktionen/) · [Compliance-Einordnung](/reference/compliance/)*

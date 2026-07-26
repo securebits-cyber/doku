@@ -10,6 +10,13 @@ import starlightScrollToTop from 'starlight-scroll-to-top';
 export default defineConfig({
 	site: 'https://docs.sentrymail.de',
 	output: 'static',
+	// Die Seite hiess bis Juli 2026 „NIS2 und BSI"; seit sie auch DSGVO und
+	// ISO 27001 abdeckt, passt der alte Pfad nicht mehr. Er bleibt als
+	// Weiterleitung bestehen — die URL ist extern verlinkt.
+	redirects: {
+		'/reference/nis2-und-bsi': '/reference/compliance/',
+		'/en/reference/nis2-und-bsi': '/en/reference/compliance/',
+	},
 	integrations: [
 		// mermaid muss vor Starlight stehen (verarbeitet ```mermaid-Bloecke zuerst)
 		mermaid({ autoTheme: true }),
@@ -64,7 +71,7 @@ export default defineConfig({
 							{ icon: 'i-ph:user-circle-check-duotone', slug: 'reference/datenschutz' },
 							{ icon: 'i-ph:siren-duotone', slug: 'reference/meldung-analyse' },
 							{ icon: 'i-ph:device-mobile-duotone', slug: 'reference/weitere-kanaele' },
-							{ icon: 'i-ph:seal-check-duotone', slug: 'reference/nis2-und-bsi' },
+							{ icon: 'i-ph:seal-check-duotone', slug: 'reference/compliance' },
 							{ icon: 'i-ph:question-duotone', slug: 'reference/faq' },
 							{ icon: 'i-ph:wrench-duotone', slug: 'reference/fehlerbehebung' },
 							{ icon: 'i-ph:map-trifold-duotone', slug: 'reference/roadmap' },

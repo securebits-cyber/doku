@@ -134,6 +134,6 @@ Was **vor** dem Einschalten passiert ist, wird nicht nachträglich verschickt: E
 
 ## Einordnung für NIS2 / BSI
 
-Dokumentierte, verpflichtende Schulungen mit Nachweis adressieren direkt die Anforderungen aus **NIS2 Art. 21** (Cyberhygiene und Schulungen) und dem BSI-Baustein **ORP.3 „Sensibilisierung und Schulung"**. Das LMS schließt damit den Kreis „Simulieren → Messen → Schulen → Nachweisen" — Details unter [NIS2 und BSI](/reference/nis2-und-bsi/).
+Dokumentierte, verpflichtende Schulungen mit Nachweis adressieren direkt die Anforderungen aus **NIS2 Art. 21** (Cyberhygiene und Schulungen) und dem BSI-Baustein **ORP.3 „Sensibilisierung und Schulung"**. Das LMS schließt damit den Kreis „Simulieren → Messen → Schulen → Nachweisen" — Details unter [Compliance-Einordnung](/reference/compliance/).
 
 Siehe auch: [Funktionen](/reference/funktionen/) · [Konfiguration](/guides/konfiguration/) · [Roadmap](/reference/roadmap/)

@@ -227,4 +227,4 @@ Accessing other people's mailboxes is the most far-reaching action this product 
 
 ---
 
-*See also: [Data protection & co-determination](/en/reference/datenschutz/) · [Features](/en/reference/funktionen/) · [NIS2 & BSI](/en/reference/nis2-und-bsi/)*
+*See also: [Data protection & co-determination](/en/reference/datenschutz/) · [Features](/en/reference/funktionen/) · [Compliance mapping](/en/reference/compliance/)*
