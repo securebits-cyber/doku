@@ -174,6 +174,16 @@ zcat backups/db-<timestamp>.sql.gz | docker compose exec -T postgres psql -U "$P
 
 > ⚠️ A restored backup only matches a code state with the **same or older** migration schema. When downgrading, always reset the code first, then restore the backup.
 
+### Without internet access
+
+If the machine cannot reach the internet, `git pull` does not work. For that case there are signed **offline update bundles**: a single file that reaches the server by any route and is verified completely before extraction (signature, checksum per file, version chain).
+
+```bash
+./update.sh --bundle sentrymail-update-0.38.0.tar.gz
+```
+
+Building, key handling and the full sequence are described in their own guide: [Offline updates](/en/guides/offline-updates/).
+
 ### Add-ons & versions
 
 The **Business** and **Enterprise add-ons** have **their own releases** (separate from the core). In a production install they are part of the backend image — the rebuild above updates them too. In the developer setup (mounted via volume) they are updated separately via `git pull` in their repos, followed by `docker compose restart backend`.
