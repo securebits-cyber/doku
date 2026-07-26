@@ -2,7 +2,7 @@
 title: "Offline updates"
 description: "Build, verify and apply signed update bundles for installations without internet access."
 sidebar:
-  order: 4
+  order: 5
 ---
 
 The normal way to update a SentryMail instance is `./update.sh`: it fetches the new state via `git pull` and rebuilds the stack. That assumes the machine can reach the internet.
