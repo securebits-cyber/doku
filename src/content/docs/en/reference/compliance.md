@@ -125,6 +125,8 @@ What an auditor or a supervisory authority actually wants to see, and where it l
 
 PDF records are produced as **PDF/A-3b** and can be **digitally signed**. On how far a self-signed signature reaches: [Security overview](/en/reference/sicherheitsueberblick/).
 
+That the audit log itself was not altered afterwards can be recomputed independently: the entries form a hash chain, and the bundled verification tool works without SentryMail. See [evidence chain](/en/reference/nachweiskette/).
+
 ## Recommended approach
 
 1. **Legal first.** Involve data protection and the works/staff council **before** the first campaign. A works agreement produced after the fact costs more trust than the first simulation yields in insight.

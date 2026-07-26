@@ -72,6 +72,7 @@ export default defineConfig({
 							{ icon: 'i-ph:shield-check-duotone', slug: 'reference/sicherheit' },
 							{ icon: 'i-ph:certificate-duotone', slug: 'reference/sicherheitsueberblick' },
 							{ icon: 'i-ph:user-circle-check-duotone', slug: 'reference/datenschutz' },
+							{ icon: 'i-ph:link-simple-duotone', slug: 'reference/nachweiskette' },
 							{ icon: 'i-ph:siren-duotone', slug: 'reference/meldung-analyse' },
 							{ icon: 'i-ph:device-mobile-duotone', slug: 'reference/weitere-kanaele' },
 							{ icon: 'i-ph:seal-check-duotone', slug: 'reference/compliance' },

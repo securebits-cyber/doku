@@ -125,6 +125,8 @@ Was ein Auditor oder eine Aufsichtsbehörde tatsächlich sehen will, und wo es l
 
 PDF-Nachweise werden als **PDF/A-3b** erzeugt und lassen sich **digital signieren**. Zur Reichweite einer selbstsignierten Signatur: [Sicherheitsüberblick](/reference/sicherheitsueberblick/).
 
+Dass das Audit-Log selbst nicht nachträglich verändert wurde, lässt sich unabhängig nachrechnen: Die Einträge sind zu einer Hash-Kette verknüpft, und das mitgelieferte Prüfwerkzeug kommt ohne SentryMail aus. Siehe [Nachweiskette](/reference/nachweiskette/).
+
 ## Empfohlenes Vorgehen
 
 1. **Rechtliches zuerst.** Datenschutz und Betriebs-/Personalrat **vor** der ersten Kampagne einbeziehen. Eine nachgereichte Betriebsvereinbarung kostet mehr Vertrauen, als die erste Simulation an Erkenntnis bringt.
