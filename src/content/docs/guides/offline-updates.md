@@ -73,9 +73,23 @@ python tools/build_update_bundle.py build \
 
 `--min-version` ist der Hebel für Migrationsketten: Setzt ein Release ein Zwischenrelease voraus, wird es hier eingetragen. Eine zu alte Instanz weist das Bundle dann mit einem verständlichen Hinweis ab, statt in einer halb gelaufenen Migration zu landen.
 
-Nicht mit ins Bundle wandern unter anderem `.env`, `.git`, `node_modules`, `__pycache__`, `backups` und `dist`. Die `.env` steht bewusst an erster Stelle dieser Liste: Ein Bundle wird weitergereicht, und eine mitgelieferte `.env` wäre ein Zugangsdaten-Leck.
+Nicht mit ins Bundle wandern unter anderem `.env`, `.git`, `node_modules`, `__pycache__`, `backups` und `dist`.
+
+:::caution[Die `.env` bleibt draußen — erzwungen, nicht nur ausgeschlossen]
+Ein Bundle wird weitergereicht, und eine mitgelieferte `.env` wäre gleich zwei Probleme: ein Zugangsdaten-Leck beim Ersteller und ein überschriebenes DB-Passwort samt `SECRET_KEY` beim Empfänger. Der Ausschluss im Bau-Werkzeug allein genügt dafür nicht — ein Bundle kann von jedem beliebigen Werkzeug erzeugt worden sein. Deshalb **weist die Prüfung jedes Bundle ab**, das `.env` oder `.env.*` an irgendeiner Stelle der Nutzlast enthält, auch wenn es korrekt signiert ist.
+:::
 
 Das Format ist bewusst `.tar.gz` und nicht das kompaktere zstd — ein Offline-Bundle landet auf Maschinen, deren Werkzeugstand nicht bekannt ist, und gzip ist überall vorhanden.
+
+### Reproduzierbar bauen
+
+Mit gesetztem `SOURCE_DATE_EPOCH` ist das Bundle byte-identisch reproduzierbar — zwei Läufe derselben Quelle liefern dieselbe Datei, auch unter anderem Ausgabenamen:
+
+```bash
+SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) python tools/build_update_bundle.py build …
+```
+
+Ohne die Variable steht der Erstellzeitpunkt im Manifest und das Bundle unterscheidet sich bei jedem Lauf. Für den Normalbetrieb genügt das; wer ein Bundle unabhängig nachbauen und gegen das ausgelieferte vergleichen will, setzt die Variable.
 
 ## Schritt 3: Bundle prüfen
 
