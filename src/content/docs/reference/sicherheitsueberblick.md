@@ -121,7 +121,9 @@ Ehrlichkeit an dieser Stelle ist nützlicher als eine lückenlose Erfolgsmeldung
 
 ## Schwachstelle melden
 
-Sicherheitsrelevante Funde bitte **nicht** über ein öffentliches Issue melden, sondern an die in `SECURITY.md` des Repositorys genannte Adresse. Wir bitten um koordinierte Offenlegung und melden uns zurück, bevor Details veröffentlicht werden.
+Sicherheitsrelevante Funde bitte **nicht** über ein öffentliches Issue melden, sondern an die Adresse in [SECURITY.md](https://github.com/securebits-cyber/SentryMail/blob/main/SECURITY.md). Dort stehen auch der unterstützte Versionsstand und der Ablauf der Offenlegung.
+
+Wir bitten um koordinierte Offenlegung und melden uns zurück, bevor Details veröffentlicht werden.
 
 ---
 

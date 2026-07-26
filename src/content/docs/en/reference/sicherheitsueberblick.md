@@ -121,7 +121,9 @@ Honesty here is more useful than a seamless success story:
 
 ## Reporting a vulnerability
 
-Please do **not** report security findings through a public issue, but to the address named in the repository's `SECURITY.md`. We ask for coordinated disclosure and will respond before any details are published.
+Please do **not** report security findings through a public issue, but to the address in [SECURITY.md](https://github.com/securebits-cyber/SentryMail/blob/main/SECURITY.md). It also states the supported versions and the disclosure process.
+
+We ask for coordinated disclosure and will respond before any details are published.
 
 ---
 
