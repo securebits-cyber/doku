@@ -31,6 +31,7 @@ Ohne Lizenz nutzbar.
 - **Globales Fallback-SMTP** unter **Einstellungen → SMTP** (greift, wenn eine Kampagne kein eigenes Sending Profile nutzt).
 - **Sending Profiles** bündeln SMTP-Zugangsdaten und Absender-Identität je Kampagne.
 - Provider-agnostisch (IONOS, Hetzner, Mailgun, SES, Postmark, eigener Mailserver …). Passwörter verschlüsselt at-rest; die API gibt sie nie zurück (nur ein `has_*`-Flag).
+- Dass das SMTP funktioniert, heißt noch nicht, dass die Mail beim Empfänger ankommt — dazwischen steht dessen Mail-Gateway. Siehe [Zustellung](/guides/zustellung/): Allowlisting, Selbsttest und Diagnose.
 
 ### GeoIP / Länder-Statistik (optional)
 

@@ -2,7 +2,7 @@
 title: "Schulungsmodul (LMS)"
 description: "Selbstgehostete Pflichtschulungen mit Videos einrichten: Videospeicher, automatische Zuweisung, Verständnis-Quiz, Fristen und revisionssichere Zertifikate."
 sidebar:
-  order: 3
+  order: 4
 ---
 
 Das **Schulungsmodul (LMS – Learning Management System)** liefert die logische Folgemaßnahme zur Phishing-Simulation: Wer auffällig wird, bekommt automatisch eine **selbstgehostete Pflichtschulung mit Videos** zugewiesen — ohne Drittanbieter-CDN, mit revisionssicherem Nachweis.

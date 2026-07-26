@@ -57,6 +57,7 @@ export default defineConfig({
 						items: [
 							{ icon: 'i-ph:rocket-launch-duotone', slug: 'guides/installation' },
 							{ icon: 'i-ph:sliders-duotone', slug: 'guides/konfiguration' },
+							{ icon: 'i-ph:paper-plane-tilt-duotone', slug: 'guides/zustellung' },
 							{ icon: 'i-ph:graduation-cap-duotone', slug: 'guides/schulungsmodul' },
 							{ icon: 'i-ph:shield-checkered-duotone', slug: 'guides/offline-updates' },
 						],
