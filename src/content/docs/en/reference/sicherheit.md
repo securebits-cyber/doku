@@ -77,4 +77,4 @@ What matters regardless of the tool:
 
 Results serve to **improve awareness**, **not** to penalize individuals. Coordinate simulations and any data collection internally beforehand.
 
-See also: [Configuration](/en/guides/konfiguration/) · [NIS2 & BSI](/en/reference/nis2-und-bsi/)
+See also: [Configuration](/en/guides/konfiguration/) · [Compliance mapping](/en/reference/compliance/)

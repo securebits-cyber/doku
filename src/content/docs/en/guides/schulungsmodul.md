@@ -134,6 +134,6 @@ Whatever happened **before** you switched it on is not sent retrospectively: a q
 
 ## Relevance for NIS2 / BSI
 
-Documented, mandatory training with evidence directly addresses the requirements of **NIS2 Art. 21** (cyber hygiene and training) and the BSI building block **ORP.3 "Awareness and training"**. The LMS thus closes the loop "simulate → measure → train → prove" — details under [NIS2 and BSI](/en/reference/nis2-und-bsi/).
+Documented, mandatory training with evidence directly addresses the requirements of **NIS2 Art. 21** (cyber hygiene and training) and the BSI building block **ORP.3 "Awareness and training"**. The LMS thus closes the loop "simulate → measure → train → prove" — details under [Compliance mapping](/en/reference/compliance/).
 
 See also: [Features](/en/reference/funktionen/) · [Configuration](/en/guides/konfiguration/) · [Roadmap](/en/reference/roadmap/)

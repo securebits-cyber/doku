@@ -77,4 +77,4 @@ Worauf es unabhängig vom Werkzeug ankommt:
 
 Ergebnisse dienen der **Awareness-Verbesserung**, **nicht** der Sanktionierung Einzelner. Simulationen und etwaige Datenerfassung vorab intern abstimmen.
 
-Siehe auch: [Konfiguration](/guides/konfiguration/) · [NIS2 und BSI](/reference/nis2-und-bsi/)
+Siehe auch: [Konfiguration](/guides/konfiguration/) · [Compliance-Einordnung](/reference/compliance/)
