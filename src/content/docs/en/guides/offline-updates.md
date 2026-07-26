@@ -73,9 +73,23 @@ python tools/build_update_bundle.py build \
 
 `--min-version` is the lever for migration chains: if a release requires an intermediate release, set it here. An instance that is too old then rejects the bundle with an understandable message instead of ending up in a half-completed migration.
 
-Among others, `.env`, `.git`, `node_modules`, `__pycache__`, `backups` and `dist` are excluded from the bundle. The `.env` deliberately heads that list: a bundle gets passed around, and a bundled `.env` would be a credential leak.
+Among others, `.env`, `.git`, `node_modules`, `__pycache__`, `backups` and `dist` are excluded from the bundle.
+
+:::caution[The `.env` stays out — enforced, not merely excluded]
+A bundle gets passed around, and a bundled `.env` would be two problems at once: a credential leak on the builder's side and an overwritten database password plus `SECRET_KEY` on the recipient's. Excluding it in the build tool alone is not enough — a bundle can have been produced by any tool. Verification therefore **rejects any bundle** containing `.env` or `.env.*` anywhere in the payload, even when it is correctly signed.
+:::
 
 The format is deliberately `.tar.gz` rather than the more compact zstd — an offline bundle lands on machines whose tooling is unknown, and gzip is available everywhere.
+
+### Reproducible builds
+
+With `SOURCE_DATE_EPOCH` set, the bundle is byte-identical reproducible — two runs over the same source produce the same file, even under a different output name:
+
+```bash
+SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) python tools/build_update_bundle.py build …
+```
+
+Without the variable the build time goes into the manifest and the bundle differs on every run. That is fine for normal operation; set the variable if you want to rebuild a bundle independently and compare it against the one that was shipped.
 
 ## Step 3: verify the bundle
 
