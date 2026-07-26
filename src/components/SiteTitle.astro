@@ -1,25 +1,59 @@
 ---
-// Typografische Wordmark "sentrymail." (Design-System Konzept K):
-// Roboto Bold, tracking -0.04em, Ember-Punkt als einziges Farbelement.
-// Als Komponente statt SVG, damit die selbst gehostete Roboto sicher greift.
+// Marken-Lockup "sentrymail." mit Unterzeile SECURITY AWARENESS
+// (Design-System Konzept K): Roboto Bold, tracking -0.04em, Ember-Punkt als
+// einziges Farbelement, darunter die Unterzeile in Roboto Mono.
+//
+// Als Komponente statt SVG, damit die selbst gehostete Roboto sicher greift:
+// Ein SVG in einem <img> ist ein eigenes Dokument und sieht die Webfonts der
+// einbettenden Seite nicht.
+//
+// Die Unterzeile ist wie im Design-System auf 8px nach unten begrenzt
+// (Math.max(8, size * 0.24) in brand-wordmark.html). In der schmalen Kopfzeile
+// kleiner Geraete ist selbst das zu viel Hoehe — dort entfaellt sie und die
+// Wortmarke steht allein.
 const { locale } = Astro.locals.starlightRoute;
 const href = locale ? `/${locale}/` : '/';
 ---
 
-<a {href} class="hs-wordmark">sentrymail<span aria-hidden="true">.</span></a>
+<a {href} class="hs-lockup">
+	<span class="hs-wordmark">sentrymail<span aria-hidden="true">.</span></span>
+	<span class="hs-tagline" aria-hidden="true">Security Awareness</span>
+</a>
 
 <style>
+	.hs-lockup {
+		display: inline-flex;
+		flex-direction: column;
+		line-height: 1;
+		text-decoration: none;
+	}
 	.hs-wordmark {
 		font-family: var(--__sl-font);
 		font-weight: 700;
 		font-size: var(--sl-text-xl);
 		letter-spacing: -0.04em;
-		line-height: 1;
 		color: var(--sl-color-white);
-		text-decoration: none;
 		white-space: nowrap;
 	}
 	.hs-wordmark span {
 		color: #f0591f; /* ember-500, identisch in Light und Dark */
+	}
+	.hs-tagline {
+		align-self: flex-end;
+		font-family: var(--sl-font-mono);
+		font-size: 8px;
+		letter-spacing: 0.32em;
+		text-transform: uppercase;
+		color: var(--sl-color-gray-3);
+		margin-top: 0.3em;
+		/* Die Laufweite haengt rechts einen Leerraum an; ohne Ausgleich stuende
+		   die Unterzeile sichtbar zu weit links unter der Wortmarke. */
+		margin-right: -0.32em;
+		white-space: nowrap;
+	}
+	@media (max-width: 50rem) {
+		.hs-tagline {
+			display: none;
+		}
 	}
 </style>
