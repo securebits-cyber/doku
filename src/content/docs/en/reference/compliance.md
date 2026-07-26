@@ -127,6 +127,8 @@ PDF records are produced as **PDF/A-3b** and can be **digitally signed**. On how
 
 That the audit log itself was not altered afterwards can be recomputed independently: the entries form a hash chain, and the bundled verification tool works without SentryMail. See [evidence chain](/en/reference/nachweiskette/).
 
+Two further records arise in the Enterprise add-on: the [control effectiveness test](/en/reference/kontrolltest/) shows which protective layer of the mail infrastructure catches what, and the [NIS2 reporting assistant](/en/reference/nis2-meldung/) documents deadlines and notification decisions — explicitly including the decision *against* notifying.
+
 ## Recommended approach
 
 1. **Legal first.** Involve data protection and the works/staff council **before** the first campaign. A works agreement produced after the fact costs more trust than the first simulation yields in insight.

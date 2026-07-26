@@ -75,6 +75,8 @@ export default defineConfig({
 							{ icon: 'i-ph:link-simple-duotone', slug: 'reference/nachweiskette' },
 							{ icon: 'i-ph:siren-duotone', slug: 'reference/meldung-analyse' },
 							{ icon: 'i-ph:device-mobile-duotone', slug: 'reference/weitere-kanaele' },
+							{ icon: 'i-ph:shield-warning-duotone', slug: 'reference/kontrolltest' },
+							{ icon: 'i-ph:megaphone-duotone', slug: 'reference/nis2-meldung' },
 							{ icon: 'i-ph:seal-check-duotone', slug: 'reference/compliance' },
 							{ icon: 'i-ph:question-duotone', slug: 'reference/faq' },
 							{ icon: 'i-ph:wrench-duotone', slug: 'reference/fehlerbehebung' },

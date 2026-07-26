@@ -137,6 +137,7 @@ Downgrading through a bundle is deliberately not possible — a bundle with an o
 
 ## What a bundle does not solve
 
+- **Container images and dependencies.** The bundle contains source code. Step 5 rebuilds the stack and pulls base images from Docker Hub as well as packages from PyPI and the npm registry. **On a fully air-gapped machine this step fails.** Until the image bundle is available, such an installation needs a local registry (for example Harbor) and package mirrors for PyPI and npm.
 - **Add-ons.** Business and Enterprise add-ons have their own releases. In a production installation they are part of the backend image, so the rebuild in step 5 covers them.
 - **License checks.** The license is verified online against the license server. A permanently air-gapped instance keeps running with the Open Core feature set once the grace period expires — it is **not** shut down.
 - **Update notifications.** An air-gapped instance does not learn on its own that a new version exists. Emptying `UPDATE_CHECK_URL` in the `.env` turns the hint off entirely.
