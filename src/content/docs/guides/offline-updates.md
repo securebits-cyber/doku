@@ -137,6 +137,7 @@ Ein Downgrade über ein Bundle ist bewusst nicht möglich — ein Bundle mit äl
 
 ## Was ein Bundle nicht löst
 
+- **Container-Images und Abhängigkeiten.** Das Bundle enthält Quelltext. Schritt 5 baut den Stack neu und lädt dabei Basis-Images von Docker Hub sowie Pakete von PyPI und aus der npm-Registry. **Auf einer vollständig abgeschotteten Maschine schlägt dieser Schritt fehl.** Bis das Image-Bundle verfügbar ist, braucht eine solche Installation eine lokale Registry (z. B. Harbor) und Paket-Spiegel für PyPI und npm.
 - **Add-ons.** Business- und Enterprise-Add-ons haben eigene Releases. In einer Produktionsinstallation sind sie Teil des Backend-Images, der Rebuild in Schritt 5 deckt sie also mit ab.
 - **Lizenzprüfung.** Die Lizenz wird online gegen den Lizenzserver geprüft. Eine dauerhaft abgeschottete Instanz läuft nach Ablauf der Grace Period im Open-Core-Funktionsumfang weiter — sie wird **nicht** abgeschaltet.
 - **Update-Benachrichtigung.** Eine abgeschottete Instanz erfährt nicht von selbst, dass es eine neue Version gibt. `UPDATE_CHECK_URL` in der `.env` leeren schaltet den Hinweis ganz ab.

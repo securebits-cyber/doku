@@ -127,6 +127,8 @@ PDF-Nachweise werden als **PDF/A-3b** erzeugt und lassen sich **digital signiere
 
 Dass das Audit-Log selbst nicht nachträglich verändert wurde, lässt sich unabhängig nachrechnen: Die Einträge sind zu einer Hash-Kette verknüpft, und das mitgelieferte Prüfwerkzeug kommt ohne SentryMail aus. Siehe [Nachweiskette](/reference/nachweiskette/).
 
+Zwei weitere Nachweise entstehen im Enterprise-Add-on: der [Kontroll-Wirksamkeitstest](/reference/kontrolltest/) belegt, welche Schutzschicht der Mailinfrastruktur was fängt, und der [NIS2-Meldeassistent](/reference/nis2-meldung/) dokumentiert Fristen und Meldeentscheidungen — ausdrücklich auch die Entscheidung *gegen* eine Meldung.
+
 ## Empfohlenes Vorgehen
 
 1. **Rechtliches zuerst.** Datenschutz und Betriebs-/Personalrat **vor** der ersten Kampagne einbeziehen. Eine nachgereichte Betriebsvereinbarung kostet mehr Vertrauen, als die erste Simulation an Erkenntnis bringt.

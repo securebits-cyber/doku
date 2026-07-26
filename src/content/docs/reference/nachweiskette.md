@@ -88,8 +88,42 @@ Unter *Einstellungen → Datenschutz* gibt es ein eigenes Feld *Aufbewahrungsfri
 Getrennt von der Frist für Kampagnendaten, weil das Audit-Log der Nachweis ist, den Sie im Prüfungsfall brauchen. Es zusammen mit den Kampagnendaten stillschweigend mitzulöschen wäre eine böse Überraschung.
 :::
 
+## Zeitstempel eines Dritten (Enterprise)
+
+Die Kette belegt, dass Einträge **untereinander** unverändert sind. Sie belegt nicht, **wann** sie entstanden — die Zeitstempel darin stammen vom Server selbst, und wer den Server kontrolliert, kontrolliert die Uhr.
+
+Ein Zeitstempeldienst nach **RFC 3161** schließt diese Lücke: Er bestätigt, dass ein bestimmter Kettenkopf zu einem bestimmten Zeitpunkt bereits existierte. Unter *Einstellungen → Zeitstempeldienst* trägt der Betreiber die URL seines Dienstes ein — kommerziell, behördlich oder selbst betrieben. **Kein Anbieter ist im Code verdrahtet.** Ohne Konfiguration entfällt die Funktion.
+
+Gestempelt wird in einem einstellbaren Abstand (Vorgabe täglich) sowie auf Knopfdruck vor einem Audit.
+
+:::caution[SentryMail prüft das Token nicht kryptografisch]
+Geprüft wird nur, ob der Dienst die Anfrage angenommen hat (`PKIStatus`). Das Token wird **unverändert** gespeichert und lässt sich herunterladen; die eigentliche Prüfung macht der Auditor selbst:
+
+```bash
+openssl ts -verify -in anker.tsr -queryfile anker.tsq -CAfile tsa-ca.pem
+```
+
+Eine halbe Prüfung im Produkt wäre schlechter als gar keine — sie würde Sicherheit vortäuschen, die niemand nachgerechnet hat.
+:::
+
+Ein **fehlgeschlagener Stempel** wird als Anker mit Status *failed* festgehalten, nicht verschwiegen: Eine Lücke in der Ankerfolge ist selbst eine Aussage, und der Betreiber soll sehen, dass sein Dienst nicht antwortet.
+
+## Auditoren-Zugang (Enterprise)
+
+Ein externer Prüfer braucht Einsicht in das Audit-Log, aber kein Konto mit Verwaltungsrechten und keinen dauerhaften Zugang. Unter *Einstellungen → Auditoren-Zugänge* wird die Gewährung erteilt:
+
+- **befristet** — das Ablaufdatum ist Pflichtfeld
+- **ausschließlich lesend** — es gibt keinen schreibenden Endpunkt
+- **eigenständig protokolliert** — wer wann was eingesehen hat, steht wiederum in der Kette
+
+:::note[Bewusst keine neue Rolle]
+Der Zugang hängt an der Gewährung, nicht an einem Kontotyp. Damit läuft er mit dem Datum von selbst aus, statt als vergessene Rolle liegenzubleiben — der häufigste Weg, auf dem befristete Prüferzugänge dauerhaft werden.
+:::
+
+Ein Widerruf **löscht** die Gewährung nicht, sondern markiert sie: Dass ein Zugang bestand, ist selbst Teil des Nachweises. Der [Datenschutzmodus](/reference/datenschutz/) gilt weiter — ein Auditor sieht das Audit-Log, keine Einzelpersonen-Auswertungen.
+
 ## Verhältnis zu NIS2 und BSI
 
 Die Kette liefert die technische Grundlage für den Nachweis, dass Protokolle nicht nachträglich verändert wurden — ein wiederkehrender Prüfpunkt bei ISO 27001 und im BSI-IT-Grundschutz. Sie ersetzt keine rechtliche Bewertung und trifft keine Aussage darüber, ob Ihr Aufbewahrungskonzept vollständig ist. Siehe auch die [Compliance-Einordnung](/reference/compliance/).
 
-Noch nicht enthalten und im **Enterprise-Add-on** vorgesehen: RFC-3161-Zeitstempel über Kettenanker (belegt den Zeitpunkt zusätzlich gegenüber Dritten) und ein befristeter, schreibgeschützter Auditoren-Zugang.
+Die Enterprise-Bausteine oben — Zeitstempel eines Dritten und befristeter Auditoren-Zugang — schließen die beiden Lücken, die eine reine Hash-Kette offen lässt: den Zeitpunkt gegenüber Dritten und die Einsicht ohne Verwaltungsrechte.

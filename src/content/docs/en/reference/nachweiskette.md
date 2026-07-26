@@ -88,8 +88,42 @@ Under *Settings → Privacy* there is a separate field *retention period for aud
 Separate from the retention for campaign data, because the audit log is the evidence you need under scrutiny. Deleting it silently along with campaign data would be an unpleasant surprise.
 :::
 
+## Third-party timestamps (Enterprise)
+
+The chain proves that entries are unchanged **relative to one another**. It does not prove **when** they came into being — the timestamps within come from the server itself, and whoever controls the server controls the clock.
+
+A timestamping service per **RFC 3161** closes that gap: it confirms that a particular chain head already existed at a particular point in time. Under *Settings → Timestamping service* the operator enters the URL of their service — commercial, governmental or self-hosted. **No vendor is hard-wired into the code.** Without configuration the feature is simply absent.
+
+Stamping happens at a configurable interval (default daily) and on demand before an audit.
+
+:::caution[SentryMail does not verify the token cryptographically]
+Only the acceptance by the service is checked (`PKIStatus`). The token is stored **untouched** and can be downloaded; the actual verification is done by the auditor:
+
+```bash
+openssl ts -verify -in anchor.tsr -queryfile anchor.tsq -CAfile tsa-ca.pem
+```
+
+Half a verification in the product would be worse than none — it would suggest assurance nobody recomputed.
+:::
+
+A **failed stamp** is recorded as an anchor with status *failed* rather than swallowed: a gap in the anchor sequence is itself a statement, and the operator should see that their service is not responding.
+
+## Auditor access (Enterprise)
+
+An external auditor needs sight of the audit log, but no account with administrative rights and no permanent access. Under *Settings → Auditor access* a grant is issued:
+
+- **time-limited** — the expiry date is mandatory
+- **read-only** — there is no writing endpoint
+- **separately logged** — who looked at what and when goes into the chain in turn
+
+:::note[Deliberately no new role]
+Access hangs on the grant, not on an account type. It therefore expires by itself with the date instead of lingering as a forgotten role — the most common way time-limited auditor access becomes permanent.
+:::
+
+Revoking does **not** delete the grant but marks it: that access existed is itself part of the evidence. [Privacy mode](/en/reference/datenschutz/) continues to apply — an auditor sees the audit log, not evaluations of individual people.
+
 ## Relation to NIS2 and BSI
 
 The chain provides the technical basis for demonstrating that logs were not altered afterwards — a recurring audit point under ISO 27001 and the BSI IT-Grundschutz. It replaces no legal assessment and says nothing about whether your retention concept is complete. See also the [compliance mapping](/en/reference/compliance/).
 
-Not yet included and planned for the **Enterprise add-on**: RFC 3161 timestamps over chain anchors (additionally attesting the point in time towards third parties) and time-limited, read-only auditor access.
+The Enterprise building blocks above — third-party timestamps and time-limited auditor access — close the two gaps a pure hash chain leaves open: the point in time towards third parties, and inspection without administrative rights.
