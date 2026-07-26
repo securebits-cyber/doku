@@ -47,6 +47,8 @@ This affects breakdowns by browser, operating system, device, country, language,
 
 The **data protection officer** role is assigned in user management. It is a control role, not an analyst role: in the interface it only sees the privacy settings and the audit log.
 
+The role can additionally grant the **second approval for campaigns in the high risk class** — lures touching salary, termination or health. That puts the decision about particularly distressing simulations with the works council role rather than with operations. It is configured under [campaign preflight](/en/guides/preflight/).
+
 ## Four-eyes unlock
 
 For justified individual cases — a genuine attack, for instance — the lock can be lifted temporarily.
