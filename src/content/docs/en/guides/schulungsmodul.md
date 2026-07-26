@@ -2,7 +2,7 @@
 title: "Training module (LMS)"
 description: "Set up self-hosted mandatory video training: video storage, automatic assignment, comprehension quizzes, deadlines and audit-proof certificates."
 sidebar:
-  order: 4
+  order: 5
 ---
 
 The **training module (LMS – Learning Management System)** provides the logical follow-up to a phishing simulation: anyone who fails is automatically assigned **self-hosted mandatory training with videos** — no third-party CDN, with an audit-proof record.

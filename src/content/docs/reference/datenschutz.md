@@ -45,7 +45,9 @@ Betroffen sind Aufschlüsselungen nach Browser, Betriebssystem, Gerät, Land, Sp
 | Datenschutzbeauftragter | Freigaben erteilen und widerrufen, Policy und Audit-Log einsehen | auswerten, Einstellungen ändern |
 | Benutzer | — | administrative Funktionen |
 
-Die Rolle **Datenschutzbeauftragter** wird in der Benutzerverwaltung vergeben. Sie ist eine Kontroll-, keine Auswerterrolle: in der Oberfläche sieht sie nur Datenschutzeinstellungen und Audit-Log.
+Die Rolle **Datenschutzbeauftragter** wird in der Benutzerverwaltung vergeben. Sie ist eine Kontroll-, keine Auswerterrolle: in der Oberfläche sieht sie nur Datenschutzeinstellungen, die Preflight-Regeln und das Audit-Log.
+
+Die Rolle kann zusätzlich die **Zweitfreigabe für Kampagnen hoher Risikoklasse** erteilen — Köder mit Gehalts-, Kündigungs- oder Gesundheitsbezug. Damit liegt die Entscheidung über besonders belastende Simulationen bei der Betriebsratsrolle statt beim Betrieb. Eingestellt wird das unter [Kampagnen-Preflight](/guides/preflight/).
 
 ## Vier-Augen-Freigabe
 
