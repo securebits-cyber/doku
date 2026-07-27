@@ -83,6 +83,27 @@ Jeder Datenträger trägt ein Token für den **Fundort**, nicht für eine Person
 
 Das ist kein Zufall, sondern der Grund, warum diese Simulation auch in mitbestimmungssensiblen Häusern durchführbar ist.
 
+### Getrennt ausgewertet
+
+Berichte und Control-Center führen USB-Drops **getrennt von den Mail-Kampagnen**. Zusammengezählt entstünden Zahlen, die nichts bedeuten: Ein Fundort ist kein Empfänger, ein Datenträger wird nicht *zugestellt*, und zwei nie geöffnete Datenträger drücken die Öffnungsrate einer Mail-Kampagne, mit der sie nichts zu tun haben.
+
+Konkret:
+
+- **Gesamtzahlen, Raten und Risikoverteilung** gelten für Mail-Kampagnen.
+- Das **Control-Center** zeigt für Drops einen eigenen Block: Kampagnen, ausgelegte Datenträger und wie viele davon geöffnet wurden.
+- Jede **Kampagnenzeile im Bericht** nennt ihre Art.
+- Aus dem **Human Risk Management** und der Liste *Nicht bestanden* bleiben Drops ganz heraus.
+
+:::note[Der letzte Punkt folgt aus dem Abschnitt davor]
+Beide Auswertungen sind personenbezogen. Ein Datenträger kennt aber niemanden — stünde er dort, behauptete die Auswertung eine Person, die es nicht gibt, und der Fundort erschiene dort, wo sonst ein Name steht.
+:::
+
+Erkannt wird eine Drop-Kampagne an ihren Empfängerzeilen, nicht am Kanal: Deren Adressen enden auf `.invalid` (nach RFC 2606 reserviert und nie zustellbar), es steht also kein Postfach dahinter. Der Kanal gehört zum Enterprise-Add-on, und die Auswertung im Kern darf davon nicht abhängen.
+
+:::caution[Anonymisierte Kampagnen sind keine Datenträger]
+Die [Aufbewahrungsfrist](/reference/datenschutz/) schreibt Adressen ebenfalls auf `.invalid` um. Dort **stand** aber eine Person, und ihre Statistik gehört weiter in die Mail-Zahlen. Eine Zeile zählt deshalb nur als Datenträger, wenn sie nicht anonymisiert ist — sonst verschwänden die Kennzahlen anonymisierter Kampagnen aus der Auswertung, ohne dass jemand etwas gelöscht hätte.
+:::
+
 ### Ablauf
 
 Alles im Kampagnen-Assistenten, ohne Seitenwechsel:
