@@ -65,6 +65,18 @@ A medium is planted — car park, reception, meeting room — and what is measur
 
 No macro, no script, no shortcut that launches a program. What is generated is a plain **HTML file** that sends the browser to the awareness page. That is entirely sufficient for the measurement — and anything beyond it would be a tool you do not build merely because you could: someone who builds a file that runs code on other people's machines has written malware, however good the intent.
 
+### The debrief page carries no form
+
+Opening the file lands on the **campaign's landing page**. The library ships three ready-made pages for this (category *USB drop*): a detailed debrief, a short note, and a version with a reporting route.
+
+None of them has input fields — unlike the sign-in pages that accompany the mail templates. Three reasons:
+
+1. **Everything is already measured.** The finding is "medium plugged in and file opened". A sign-in form afterwards changes nothing about the result.
+2. **There would be nobody the password belongs to.** The medium only knows the location. A submitted password would sit in the database as a real secret with nobody to attribute it to — harm without insight.
+3. **The moment is the teachable one.** Somebody who has just realised they plugged in a stranger's stick is receptive. Asking them for a password instead squanders that.
+
+Anyone who still wants to measure the escalation clones one of the library's sign-in pages and sets it as the campaign's landing page — deliberately, and with the consequence that a password is captured which cannot be attributed to anyone.
+
 ### A USB simulation knows nobody
 
 Each medium carries a token for the **location**, not for a person. Who picked up the stick is something the software does not know. No personal data arises here at all, and the individual-person lock of privacy mode has nothing to bite on.
