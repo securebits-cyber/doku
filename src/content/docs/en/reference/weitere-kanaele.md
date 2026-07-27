@@ -83,6 +83,27 @@ Each medium carries a token for the **location**, not for a person. Who picked u
 
 That is not incidental — it is why this simulation is feasible even in organisations with strong co-determination.
 
+### Reported separately
+
+Reports and the control centre keep USB drops **apart from mail campaigns**. Counted together they would produce figures that mean nothing: a location is not a recipient, a medium is not *delivered*, and two media nobody opened drag down the open rate of a mail campaign they have nothing to do with.
+
+Concretely:
+
+- **Totals, rates and the risk distribution** apply to mail campaigns.
+- The **control centre** shows drops in their own block: campaigns, media planted, and how many of them were opened.
+- Every **campaign row in the report** states its kind.
+- Drops stay out of **human risk management** and the *failed* list entirely.
+
+:::note[The last point follows from the section above]
+Both of those evaluations are person-level. A medium knows nobody — were it listed there, the evaluation would be asserting a person who does not exist, and the location would appear where a name normally stands.
+:::
+
+A drop campaign is recognised by its recipient rows, not by the channel: their addresses end in `.invalid` (reserved by RFC 2606 and never deliverable), so no mailbox stands behind them. The channel belongs to the Enterprise add-on, and reporting in the core must not depend on it.
+
+:::caution[Anonymised campaigns are not media]
+The [retention job](/en/reference/datenschutz/) also rewrites addresses to `.invalid`. But a person **was** there, and their statistics belong in the mail figures. A row therefore counts as a medium only when it is not anonymised — otherwise the metrics of anonymised campaigns would vanish from reporting without anybody having deleted anything.
+:::
+
 ### How it runs
 
 All in the campaign wizard, without changing pages:
