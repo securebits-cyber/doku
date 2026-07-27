@@ -27,6 +27,16 @@ Wiederverwendbare Empfängerlisten. Empfänger hinzufügen per:
 
 SMTP-Zugangsdaten + Absender-Identität je Profil. Test-Mail-Funktion. Ohne Profil greift das globale Fallback-SMTP.
 
+## Zustellung
+
+Das Gateway vor SentryMail entscheidet, ob eine Simulation überhaupt ankommt — und ob ein Linkscanner Klicks erzeugt, die nie ein Mensch ausgelöst hat. Drei Bausteine, alle im Open Core:
+
+- **Allowlisting-Generator** — fertige Konfigurationsschnipsel bzw. Schrittfolgen für **Exchange Online / Microsoft 365** (über `New-PhishSimOverridePolicy`, nicht über eine generische Transportregel), **Postfix**, **Proofpoint**, **Sophos** und **Barracuda**. Die Profile sind pflegbare Datendateien, kein Anbieter ist im Produktcode verdrahtet.
+- **Zustell-Selbsttest** — eine Probemail über **denselben Weg wie die Kampagne** an ein eigenes Kanarienpostfach. IMAP optional; ein IMAP-Problem wird nie als Zustellfehler ausgewiesen.
+- **Zustelldiagnose** je Kampagne — SMTP-Statuscodes (4xx vorübergehend, 5xx dauerhaft), Greylisting-Erkennung sowie SPF- und DMARC-Prüfung der Absenderdomain. DKIM wird ausdrücklich als nicht prüfbar ausgewiesen statt vorgetäuscht.
+
+Ausgewertet werden Statuscodes und DNS-Einträge, keine Empfängermerkmale. Details: [Zustellung](/guides/zustellung/)
+
 ## Landing Pages
 
 Ziel des Klicks. HTML- oder Markdown-Inhalt. Optional:
@@ -39,6 +49,19 @@ Formulare werden beim Ausliefern automatisch auf die Tracking-URL umgebogen.
 ## Kampagnen
 
 Assistent kombiniert **Vorlage + Sending Profile + Landing Page + Empfängergruppen** und optional eine **Zeitplanung**. Nach dem Anlegen wird der Versand über **Senden** gestartet.
+
+## Kampagnen-Preflight
+
+Pflichtdialog vor jedem Start; ohne bestätigten Preflight startet keine Kampagne. Bestandteil des Open Core.
+
+- **Empfängerzahl** nach Abzug der Ausschlüsse, betroffene Gruppen, Versandzeitpunkt, Risikoklasse und alle Befunde auf einen Blick.
+- **Ruhezeiten** (Fenster über Mitternacht unterstützt), **Sperrfenster** für benannte Zeiträume und ein **Cooldown** als Mindestabstand je Person (Vorgabe 30 Tage). Gezählt werden Personen, nicht Vorgänge; nur tatsächlich versendete Kampagnen zählen.
+- **Zeitzone** als IANA-Name, voreingestellt UTC — es wird keine Region verdrahtet.
+- **Risikoklasse der Köder-Themen**, gepflegt an der Vorlage. Nur *Hoch* erzwingt eine **Vier-Augen-Freigabe**; verlangte jede Klasse eine, würde sie zur Formalie. Die Themenliste ist eine pflegbare Datendatei und ausdrücklich ein Vorschlag.
+- Dass Antragsteller und Entscheider verschieden sind, ist zusätzlich in der Datenbank abgesichert, nicht nur in der Anwendungslogik. Ein **Vorlagenwechsel widerruft** die Freigabe, eine Umbenennung nicht.
+- **Gruppenausschlüsse** direkt im Dialog, ohne Freitextfeld für den Grund — dort landeten sonst besonders schutzwürdige Daten.
+
+Nur harte Befunde blockieren; alles Übrige warnt und überlässt die Entscheidung dem Betreiber. Details: [Kampagnen-Preflight](/guides/preflight/)
 
 ## Tracking & Ergebnisse
 
@@ -54,6 +77,18 @@ Assistent kombiniert **Vorlage + Sending Profile + Landing Page + Empfängergrup
 - Rollen **Admin**, **Datenschutzbeauftragter** und **Benutzer**. Admins verwalten Einstellungen und Konten.
 - Der **Datenschutzbeauftragte** ist eine Kontrollrolle: er entscheidet über Freigaben und liest das Audit-Log, wertet aber nicht aus und ändert keine Einstellungen.
 - 2FA-Status je Nutzer sichtbar; Admins können 2FA zurücksetzen.
+
+## Nachweiskette
+
+„Revisionssicher" als überprüfbare Eigenschaft statt als Zusicherung des Herstellers. Bestandteil des Open Core.
+
+- **Hash-Verkettung** jedes Audit-Eintrags mit dem Hash seines Vorgängers (SHA-256, lückenlose Position). Änderung, Entfernung oder Vertauschung eines Eintrags bricht die Kette nachweisbar.
+- **Kettenzustand im Dashboard** — Eintragszahl und Unversehrtheit; ein Bruch wird mit der betroffenen Position benannt.
+- **Nachweispaket** als ZIP mit Einträgen, Manifest und zweisprachiger Prüfanleitung, auch über die API. Zugriff haben Admins **und** der Datenschutzbeauftragte — dessen Kontrollrolle ist ohne unabhängig prüfbaren Nachweis wertlos.
+- **Eigenständiges Prüfwerkzeug** (`tools/sentrymail-verify/verify.py`): eine Datei, nur Standardbibliothek, ohne Installation, Datenbank, Netz oder SentryMail. Es darf mit dem Paket an Prüfer weitergegeben werden.
+- **Aufbewahrungsfrist für Audit-Inhalte** als eigenes Feld, bewusst getrennt von der Frist für Kampagnendaten. Gelöscht wird der Inhalt; Position, Zeitpunkt und Verkettung bleiben als *Tombstone*.
+
+Die Kette bezeugt den Zeitraum ab ihrer Einführung und behauptet nichts über die Zeit davor. Details: [Nachweiskette](/reference/nachweiskette/)
 
 ## Datenschutz & Mitbestimmung
 
@@ -102,6 +137,10 @@ Enthält alle Business-Funktionen. Zusätzlich:
 - **AI-Scoring** — auf der Berichte-Seite („KI-Risikoanalyse"): eine KI-gestützte, qualitative Einschätzung der aktuellen Human-Risk-Kennzahlen (Score-Verteilung, Wiederholungstäter, Top-Risiko-Personen inkl. Abteilung/Kritikalität) mit priorisierten Maßnahmen. Nutzt die anbieter-neutrale KI-Anbindung des Business-Add-ons.
 - **Analyse gemeldeter Mails** — jede Meldung wird beim Eingang ausgewertet: Header und SPF/DKIM/DMARC-Ergebnisse, Absender-Ungereimtheiten, **entschärfte** URLs, Anhang-Hashes und ein regelbasierter, erklärbarer Score. Gleichartige Meldungen werden zu **Wellen** zusammengefasst. Optional **ClamAV** und **YARA** (Regeln des Betreibers) zur Anhang-Prüfung sowie Abgleich gegen eine eigene **MISP**-Instanz. Nicht erreichbare Prüfer gelten ausdrücklich als „nicht geprüft“ — nie als „sauber“. Details: [Meldung & Analyse](/reference/meldung-analyse/)
 - **Massen-Quarantäne** — eine bestätigte Welle über **Microsoft Graph** oder **Postfix/Dovecot** aus allen Postfächern in einen Quarantäne-Ordner verschieben. Gesucht wird ausschließlich über die Message-ID, ein Probelauf ist zwingend, und es wird nur verschoben, nie gelöscht.
+- **Zeitstempel eines Dritten** nach **RFC 3161** auf den Kopf der Nachweiskette: Er belegt, dass ein Kettenstand zu einem Zeitpunkt bereits existierte — die Lücke, die eine reine Hash-Kette offen lässt, weil die Uhr dem Serverbetreiber gehört. Die URL trägt der Betreiber ein, kein Anbieter ist verdrahtet. Das Token wird unverändert gespeichert und extern mit `openssl ts -verify` geprüft; ein fehlgeschlagener Stempel wird als Anker mit Status *failed* festgehalten statt verschwiegen. Details: [Nachweiskette](/reference/nachweiskette/)
+- **Befristeter Auditoren-Zugang** — ausschließlich lesend, eigenständig protokolliert, Ablaufdatum Pflicht. Der Zugang hängt an der Gewährung statt an einer neuen Rolle und läuft dadurch von selbst aus, statt als vergessene Rolle liegenzubleiben. Der Datenschutzmodus gilt weiter.
+- **Kontroll-Wirksamkeitstest** — misst, **welche Schutzschicht was abfängt**, bevor überhaupt ein Mensch etwas sieht: acht Stufen von Anzeigenamen-Spoofing über SPF- und DKIM-Fehlschlag bis EICAR, Makro-Dokument, passwortgeschütztem Archiv und HTML-Smuggling. Ausschließlich an ein eigenes Testpostfach, **serverseitig erzwungen** durch Abgleich gegen Kampagnenempfänger, Gruppenmitglieder und Benutzerkonten. Die Nutzlasten sind bewusst harmlos; gemessen wird Erkennungsleistung, kein Schaden. Gelesen wird umgekehrt: **`blockiert` ist das gute Ergebnis.** Mit BSI-Zuordnung je Stufe als Vorschlag zur Orientierung. Details: [Kontroll-Wirksamkeitstest](/reference/kontrolltest/)
+- **NIS2-Meldeassistent** — Fristen-Uhr für Erstmeldung (24 Stunden), Folgemeldung (72 Stunden) und Abschlussbericht (ein Monat), gerechnet ab **Kenntnis** und in **Kalendertagen**. **Keine automatische Übermittlung** und **keine Rechtsberatung**: Die Ausgabe ist ein Entwurf, gemeldet wird von der verantwortlichen Stelle selbst. Auch die Entscheidung *gegen* eine Meldung wird mit Begründung festgehalten. Der **DSGVO-Strang** läuft als eigener Vorgang mit eigener Uhr und anderem Adressaten parallel; eine Meldung ersetzt nie die andere. Eskalation an benannte Rollen, jeweils mit Vertretung. Details: [NIS2-Meldeassistent](/reference/nis2-meldung/)
 - **Simulationen über weitere Kanäle** — außer per E-Mail auch per **SMS** (generisches HTTP-Gateway, kein Anbieter fest verdrahtet), über **Matrix** und **Nextcloud Talk** sowie als **USB-Drop** (ausgelegte Datenträger, ohne ausführbare Dateien). Bespielt werden nur dienstliche Endgeräte, solange nichts anderes freigegeben ist. Details: [Weitere Kanäle](/reference/weitere-kanaele/)
 - **Schulungsmodul (LMS)** — selbstgehostete **Pflichtschulungen mit Videos** (kein Drittanbieter-CDN): **automatische Kurszuweisung** bei Unterschreiten eines Awareness-Schwellwerts, **manipulationssicheres Fortschritts-Tracking** (nur tatsächlich gesehene Wiedergabezeit zählt), **Verständnis-Quiz**, **Fristen** mit Erinnerungen und Overdue-Eskalation sowie **revisionssichere Schulungs-Nachweise** (PDF mit Integritäts-Hash), die auch nach Ablauf der Lizenz abrufbar bleiben. Videospeicher wahlweise im Dateisystem oder S3-kompatibel (z. B. selbstgehostetes MinIO). Alternativ zum eigenen Video lässt sich ein **SCORM-1.2-Paket** importieren (**Beta**) — damit sind eingekaufte Schulungen einbindbar; der Bearbeitungsstand kommt dort vom Kurs selbst, die gemeldete Bearbeitungszeit steht im Nachweis daneben. Schulungsereignisse lassen sich per **xAPI 1.0.3** an einen vorhandenen **Learning Record Store** melden (voreingestellt pseudonym). Einrichtung: [Schulungsmodul (LMS)](/guides/schulungsmodul/).
 

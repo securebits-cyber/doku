@@ -27,6 +27,16 @@ Reusable recipient lists. Add recipients via:
 
 SMTP credentials + sender identity per profile. Test-mail function. Without a profile, the global fallback SMTP applies.
 
+## Delivery
+
+The gateway in front of SentryMail decides whether a simulation arrives at all — and whether a link scanner produces clicks no human ever made. Three building blocks, all in the Open Core:
+
+- **Allowlist generator** — ready-made configuration snippets or step sequences for **Exchange Online / Microsoft 365** (via `New-PhishSimOverridePolicy`, not a generic transport rule), **Postfix**, **Proofpoint**, **Sophos** and **Barracuda**. The profiles are maintainable data files; no vendor is hard-wired into the product code.
+- **Delivery self-test** — a probe mail over **the same path as the campaign** to a canary mailbox of your own. IMAP is optional; an IMAP problem is never reported as a delivery failure.
+- **Delivery diagnosis** per campaign — SMTP status codes (4xx temporary, 5xx permanent), greylisting detection and SPF/DMARC checks on the sender domain. DKIM is explicitly marked as not checkable rather than faked.
+
+What is evaluated are status codes and DNS records, not recipient attributes. Details: [Delivery](/en/guides/zustellung/)
+
 ## Landing pages
 
 The click target. HTML or Markdown content. Optionally:
@@ -39,6 +49,19 @@ Forms are automatically rewritten to the tracking URL on delivery.
 ## Campaigns
 
 A wizard combines **template + sending profile + landing page + recipient groups** and optionally a **schedule**. After creation, delivery is started via **Send**.
+
+## Campaign preflight
+
+A mandatory dialog before every start; without a confirmed preflight no campaign runs. Part of the Open Core.
+
+- **Recipient count** after exclusions, affected groups, send time, risk class and all findings at a glance.
+- **Quiet hours** (windows across midnight supported), **blackout windows** for named periods and a **cooldown** as the minimum interval per person (default 30 days). People are counted, not records; only campaigns actually sent count.
+- **Time zone** as an IANA name, defaulting to UTC — no region is hard-wired.
+- **Risk class of the lure topic**, maintained on the template. Only *high* forces a **four-eyes approval**; were every class to require one, it would become a formality.
+- That requester and approver differ is additionally enforced in the database, not only in application logic. A **template change revokes** the approval, a rename does not.
+- **Group exclusions** directly in the dialog, with no free-text field for the reason — special category data would end up there.
+
+Only hard findings block; everything else warns and leaves the decision to the operator. Details: [Campaign preflight](/en/guides/preflight/)
 
 ## Tracking & results
 
@@ -54,6 +77,18 @@ A wizard combines **template + sending profile + landing page + recipient groups
 - Roles **Admin**, **Data protection officer** and **User**. Admins manage settings and accounts.
 - The **data protection officer** is a control role: they decide on unlock requests and read the audit log, but do not evaluate and do not change settings.
 - 2FA status visible per user; admins can reset 2FA.
+
+## Evidence chain
+
+"Tamper-proof" as a verifiable property instead of a vendor assurance. Part of the Open Core.
+
+- **Hash chaining** of every audit entry to the hash of its predecessor (SHA-256, gap-free position). Changing, removing or swapping an entry breaks the chain demonstrably.
+- **Chain state in the dashboard** — entry count and integrity; a break is named with the affected position.
+- **Evidence package** as a ZIP with entries, manifest and bilingual verification instructions, also via the API. Admins **and** the data protection officer have access — their oversight role is worthless without independently verifiable evidence.
+- **Standalone verification tool** (`tools/sentrymail-verify/verify.py`): one file, standard library only, no installation, database, network or SentryMail. It may be handed to auditors together with the package.
+- **Retention for audit content** as a separate field, deliberately apart from the retention for campaign data. The content is deleted; position, timestamp and linkage remain as a *tombstone*.
+
+The chain attests the period from its introduction onward and claims nothing about the time before. Details: [Evidence chain](/en/reference/nachweiskette/)
 
 ## Data protection & co-determination
 
@@ -102,6 +137,10 @@ Includes all Business features. Additionally:
 - **AI scoring** — on the reports page ("AI risk analysis"): an AI-assisted, qualitative assessment of the current human-risk metrics (score distribution, repeat offenders, top-risk persons incl. department/criticality) with prioritized measures. Uses the vendor-neutral AI integration of the Business add-on.
 - **Analysis of reported mails** — every report is evaluated on arrival: headers and SPF/DKIM/DMARC results, sender inconsistencies, **defanged** URLs, attachment hashes and a rule-based, explainable score. Similar reports are grouped into **waves**. Optionally **ClamAV** and **YARA** (the operator's rules) for attachment scanning, plus a match against your own **MISP** instance. Checkers that cannot be reached count explicitly as "not scanned" — never as "clean". Details: [Reporting & analysis](/en/reference/meldung-analyse/)
 - **Mass quarantine** — move a confirmed wave out of every mailbox into a quarantine folder via **Microsoft Graph** or **Postfix/Dovecot**. The search is by Message-ID only, a dry run is mandatory, and messages are only moved, never deleted.
+- **Third-party timestamps** per **RFC 3161** on the head of the evidence chain: they confirm a chain state already existed at a point in time — the gap a pure hash chain leaves open, because the clock belongs to whoever runs the server. The operator enters the URL; no vendor is hard-wired. The token is stored untouched and verified externally with `openssl ts -verify`; a failed stamp is recorded as an anchor with status *failed* rather than swallowed. Details: [Evidence chain](/en/reference/nachweiskette/)
+- **Time-limited auditor access** — read-only, separately logged, expiry mandatory. Access hangs on the grant rather than on a new role and therefore expires by itself instead of lingering as a forgotten role. Privacy mode continues to apply.
+- **Control effectiveness test** — measures **which protective layer catches what**, before a human sees anything at all: eight stages from display-name spoofing through SPF and DKIM failure to EICAR, a macro document, a password-protected archive and HTML smuggling. To a dedicated test mailbox only, **enforced server-side** by checking against campaign recipients, group members and user accounts. The payloads are deliberately harmless; what is measured is detection performance, not harm. The reading is inverted: **`blocked` is the good result.** With a BSI mapping per stage as a suggestion for orientation. Details: [Control effectiveness test](/en/reference/kontrolltest/)
+- **NIS2 reporting assistant** — a deadline clock for the early warning (24 hours), the follow-up notification (72 hours) and the final report (one month), running from **awareness** and in **calendar days**. **No automatic transmission** and **no legal advice**: the output is a draft, and the responsible party submits it themselves. The decision *against* notifying is recorded with a reason too. The **GDPR strand** runs alongside as a separate case with its own clock and a different recipient; one notification never replaces the other. Escalation to named roles, each with a deputy. Details: [NIS2 reporting assistant](/en/reference/nis2-meldung/)
 - **Simulations over other channels** — besides email also by **SMS** (generic HTTP gateway, no provider hardwired), via **Matrix** and **Nextcloud Talk**, and as a **USB drop** (planted media, no executable files). Only company devices are used unless something else has been released. Details: [Other channels](/en/reference/weitere-kanaele/)
 - **Training module (LMS)** — self-hosted **mandatory training with videos** (no third-party CDN): **automatic course assignment** when an awareness threshold is undercut, **tamper-proof progress tracking** (only actually watched playback time counts), **comprehension quiz**, **deadlines** with reminders and overdue escalation, plus **audit-proof training records** (PDF with an integrity hash) that remain accessible even after the license expires. Video storage either in the filesystem or S3-compatible (e.g. self-hosted MinIO). As an alternative to your own video a **SCORM 1.2 package** can be imported (**beta**), which makes purchased training embeddable; progress there comes from the course itself, and the reported working time is shown alongside it in the evidence. Training events can be reported to an existing **Learning Record Store** via **xAPI 1.0.3** (pseudonymous by default). Setup: [Training module (LMS)](/en/guides/schulungsmodul/).
 

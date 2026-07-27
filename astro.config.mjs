@@ -60,7 +60,6 @@ export default defineConfig({
 							{ icon: 'i-ph:paper-plane-tilt-duotone', slug: 'guides/zustellung' },
 							{ icon: 'i-ph:list-checks-duotone', slug: 'guides/preflight' },
 							{ icon: 'i-ph:graduation-cap-duotone', slug: 'guides/schulungsmodul' },
-							{ icon: 'i-ph:shield-checkered-duotone', slug: 'guides/offline-updates' },
 						],
 					},
 					{
