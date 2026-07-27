@@ -65,6 +65,18 @@ Ein Datenträger wird ausgelegt — Parkplatz, Empfang, Besprechungsraum —, un
 
 Kein Makro, kein Skript, keine Verknüpfung, die ein Programm startet. Erzeugt wird eine schlichte **HTML-Datei**, die den Browser auf die Aufklärungsseite schickt. Das genügt für die Messung vollständig — und alles darüber hinaus wäre ein Werkzeug, das man nicht herstellt, nur weil man es könnte: Wer eine Datei baut, die auf fremden Rechnern Code ausführt, hat ein Schadprogramm geschrieben, auch mit guter Absicht.
 
+### Die Aufklärungsseite trägt kein Formular
+
+Der Klick auf die Datei landet auf der **Landing Page der Kampagne**. Die Bibliothek liefert dafür drei fertige Seiten (Kategorie *USB-Drop*): eine ausführliche Aufklärungsseite, einen Kurzhinweis und eine Fassung mit Meldeweg.
+
+Alle drei kommen **ohne Eingabefelder** — anders als die Anmeldemasken zu den Mail-Vorlagen. Drei Gründe:
+
+1. **Gemessen ist schon alles.** Der Befund lautet „Datenträger angesteckt und Datei geöffnet". Eine Anmeldemaske danach ändert am Ergebnis nichts.
+2. **Es gäbe niemanden, dem das Passwort gehört.** Der Datenträger kennt nur den Fundort. Ein abgeschicktes Passwort läge als echtes Geheimnis in der Datenbank, ohne zuordenbar zu sein — Schaden ohne Erkenntnis.
+3. **Der Moment ist der Lehrmoment.** Wer gerade begriffen hat, dass er einen fremden Stick angesteckt hat, ist aufnahmefähig. Ihn stattdessen nach dem Passwort zu fragen, verspielt die Gelegenheit.
+
+Wer die Eskalation trotzdem messen will, klont eine der Anmeldeseiten aus der Bibliothek und setzt sie als Landing Page der Kampagne — dann aber bewusst und mit der Folge, dass ein Passwort erfasst wird, das niemandem zuzuordnen ist.
+
 ### Eine USB-Simulation kennt niemanden
 
 Jeder Datenträger trägt ein Token für den **Fundort**, nicht für eine Person. Wer den Stick gefunden hat, weiß die Software nicht. Damit entstehen hier **keine personenbezogenen Daten**, und die Einzelpersonen-Sperre des Datenschutzmodus läuft ins Leere, weil es nichts gibt, worauf sie greifen könnte.
