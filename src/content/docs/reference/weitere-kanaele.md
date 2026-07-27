@@ -73,10 +73,16 @@ Das ist kein Zufall, sondern der Grund, warum diese Simulation auch in mitbestim
 
 ### Ablauf
 
-1. Kampagne anlegen und als Kanal **USB** wählen.
-2. Fundorte eintragen — je Zeile einer.
-3. Das ZIP herunterladen: ein Ordner je Datenträger, darin genau eine Datei, dazu eine Liesmich-Datei mit der Zuordnung Ordner → Fundort.
-4. Sticks bespielen und auslegen. Die Auswertung zeigt je Fundort, ob geöffnet wurde.
+Alles im Kampagnen-Assistenten, ohne Seitenwechsel:
+
+1. **Kampagnen → Neue Kampagne**, Name vergeben und als **Kanal** `USB-Drop` wählen.
+2. Was der Kanal nicht braucht, sperrt sich daraufhin selbst: **Vorlage**, **Sending Profile**, **Empfängergruppen** und **Zeitplanung**. Es wird nichts versendet, und die Fundorte treten an die Stelle der Empfänger.
+3. Die **Landing Page** bleibt wählbar — sie ist das Ziel des Klicks, wenn jemand die Datei öffnet. Ohne sie läuft der Fund ins Leere.
+4. Nach dem Anlegen erscheinen die **Fundorte** direkt darunter, je Zeile einer.
+5. Das ZIP herunterladen: ein Ordner je Datenträger, darin genau eine Datei, dazu eine Liesmich-Datei mit der Zuordnung Ordner → Fundort.
+6. Sticks bespielen und auslegen. Die Auswertung zeigt je Fundort, ob geöffnet wurde.
+
+Später erreichbar ist derselbe Schritt über *Weitere Kanäle*, wo auch die Auswertung bestehender Datenträger liegt.
 
 Die Fundorte gehören vorab mit der Interessenvertretung abgestimmt; Sozialräume und persönliche Arbeitsplätze bleiben sinnvollerweise ausgenommen.
 
