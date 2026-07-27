@@ -73,10 +73,16 @@ That is not incidental — it is why this simulation is feasible even in organis
 
 ### How it runs
 
-1. Create a campaign and pick **USB** as the channel.
-2. Enter the locations — one per line.
-3. Download the ZIP: one folder per medium containing exactly one file, plus a readme mapping folder → location.
-4. Write the sticks and plant them. The report shows per location whether it was opened.
+All in the campaign wizard, without changing pages:
+
+1. **Campaigns → New campaign**, give it a name and pick `USB drop` as the **channel**.
+2. Whatever the channel does not need disables itself: **template**, **sending profile**, **recipient groups** and **scheduling**. Nothing is sent, and the locations take the place of the recipients.
+3. The **landing page** stays selectable — it is the click target when somebody opens the file. Without it the find leads nowhere.
+4. After creation the **locations** appear right below, one per line.
+5. Download the ZIP: one folder per medium containing exactly one file, plus a readme mapping folder → location.
+6. Write the sticks and plant them. The report shows per location whether it was opened.
+
+The same step is reachable later under *Other channels*, which also holds the report on existing media.
 
 The locations belong in an agreement with the employee representation beforehand; break rooms and personal workstations are sensibly excluded.
 
