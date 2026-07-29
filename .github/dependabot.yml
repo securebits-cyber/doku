@@ -13,3 +13,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      # init und analyze muessen dieselbe Version haben, sonst bricht der Lauf
+      # mit "Loaded a configuration file for version X, but running version Y".
+      # Ohne diese Gruppe zerlegt Dependabot das in zwei PRs, die beide scheitern.
+      codeql:
+        patterns:
+          - github/codeql-action*
