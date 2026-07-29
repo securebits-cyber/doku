@@ -40,7 +40,7 @@ Der gesamte Stack (PostgreSQL, Redis, FastAPI-Backend, Frontend, Caddy) läuft a
 | `postgres` | Datenbank |
 | `redis` | Cache/Queue |
 | `backend` | API (FastAPI) |
-| `frontend` | Dashboard (React/Vite) |
+| `frontend` | Dashboard (React/Vite), im Regelbetrieb als fertig gebaute statische Dateien |
 | `caddy` | Reverse Proxy / TLS |
 
 ## Geführte Installation (empfohlen)
@@ -88,6 +88,48 @@ Die Routine schreibt ausschließlich in die `.env` (Rechte `600`) — es wird ni
 4. Datenbank-Migrationen laufen beim Start des Backends automatisch mit.
 5. Dashboard über die konfigurierte Domain (bzw. `https://localhost`) öffnen.
 
+## Betriebsarten
+
+`docker compose up -d` startet den **Produktionsbetrieb**. Das ist die Vorgabe und für jede echte Installation die richtige Wahl:
+
+- Das Frontend wird beim Bauen zu statischen Dateien kompiliert und im Container von einem schlanken Webserver ausgeliefert — es läuft **kein** Vite-Devserver.
+- Weder der Backend- noch der Frontend-Port wird auf dem Host veröffentlicht. Erreichbar ist der Stack ausschließlich über `caddy` (80/443).
+- Der Quelltext wird **nicht** in die Container gemountet, das Backend läuft ohne `--reload`. Jede Code-Änderung wird erst durch einen Neubau wirksam (siehe [Update](#update--aktualisierung)).
+
+Für die **Entwicklung** kommt `docker-compose.dev.yml` dazu — Vite mit Hot Reload, `uvicorn --reload`, Quelltext als Bind-Mount und die direkt veröffentlichten Ports 5173 (Dashboard) und 8000 (API):
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+Dauerhaft bequemer über die `.env` — danach genügt weiterhin `docker compose up -d`:
+
+```ini title=".env"
+COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml
+```
+
+> ⚠️ **Der Entwicklungs-Stack gehört nicht auf eine Maschine, die aus dem Internet erreichbar ist.** Der Vite-Devserver liefert den gesamten Frontend-Quelltext unauthentifiziert aus und meldet jeden serverseitigen Ladefehler per HMR-WebSocket an **alle** verbundenen Browser — auch Fehler, die ein fremder Portscanner ausgelöst hat. Die Ports 5173/8000 hören deshalb nur auf `127.0.0.1`. `DEV_BIND_ADDRESS` ist nur für den Fall gedacht, dass ein anderer Rechner im vertrauenswürdigen Netz zugreifen muss — dort niemals eine öffentlich erreichbare Adresse eintragen.
+
+### Frontend-Werte wirken zur Bauzeit
+
+Vite setzt die `VITE_*`-Werte beim Bauen fest in die ausgelieferten Dateien ein. Im Produktionsbetrieb wirkt eine Änderung in der `.env` deshalb **erst nach einem Neubau des Frontends**:
+
+```bash
+docker compose build frontend && docker compose up -d
+```
+
+Im Entwicklungs-Stack liest der Devserver dieselben Werte zur Laufzeit; dort genügt `docker compose up -d`.
+
+### Auf welchen Schnittstellen das Dashboard antwortet
+
+Ohne weitere Angabe lauscht `caddy` auf **allen** Netzwerkschnittstellen der Maschine (`0.0.0.0`). Bei einem Server mit öffentlicher IP heißt das: im Internet erreichbar — auch dann, wenn der Zugriff eigentlich nur über ein VPN gedacht war. `FRONTEND_BIND_ADDRESS` begrenzt das auf **eine** Schnittstelle; hinein gehört deren IP-Adresse (`ip -4 addr show` listet sie auf), z. B. die des VPN-/Overlay-Interfaces:
+
+```ini title=".env"
+FRONTEND_BIND_ADDRESS=100.64.0.5
+```
+
+> ⚠️ Hier **nicht** `127.0.0.1` eintragen: dann antwortet das Dashboard nur noch lokal auf dem Server selbst und ist auch über das VPN nicht mehr erreichbar.
+
 ## Wichtige `.env`-Werte (generisch)
 
 ```ini title=".env"
@@ -115,6 +157,14 @@ SMTP_PASSWORD=change-me
 SMTP_FROM_EMAIL=noreply@example.com
 SMTP_FROM_NAME=SentryMail
 SMTP_TLS_MODE=starttls
+
+# Frontend (wirkt erst nach "docker compose build frontend")
+VITE_API_URL=/api                          # Vorgabe; nur im Dev-Stack abweichend
+# VITE_WIKI_URL=https://wiki.example.com   # leer = offizielle Doku
+# VITE_SUPPORT_EMAIL=support@example.com   # leer = support@sentrymail.de
+
+# Netzwerk (optional)
+# FRONTEND_BIND_ADDRESS=100.64.0.5         # nur diese Schnittstelle bedienen
 ```
 
 ## Erster Login
@@ -148,6 +198,11 @@ Wer die Schritte einzeln ausführen möchte:
    mkdir -p backups
    docker compose exec -T postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" | gzip > backups/db-$(date +%Y%m%d-%H%M%S).sql.gz
    ```
+   > 💡 Der Dump enthält die Datenbank, **nicht** die vom Backend abgelegten Dateien. Wer Schulungsvideos lokal speichert (`LMS_STORAGE_BACKEND=filesystem`, Enterprise), sichert zusätzlich das Volume `backend_data`:
+   >
+   > ```bash
+   > docker compose exec -T backend tar -cz -C /app/data . > backups/backend-data-$(date +%Y%m%d-%H%M%S).tar.gz
+   > ```
 2. **Code aktualisieren:**
    ```bash
    git pull                       # neuester Stand des aktuellen Branch
@@ -157,7 +212,8 @@ Wer die Schritte einzeln ausführen möchte:
    ```bash
    docker compose up -d --build
    ```
-   - Reine Code-Änderungen im Core werden durch das gemountete Volume + uvicorn-`--reload` zwar sofort übernommen, aber **neue Migrationen und geänderte Abhängigkeiten** (`requirements.txt`, `package.json`) greifen erst nach `up -d --build` bzw. mindestens `docker compose restart backend`.
+   - `--build` ist im Produktionsbetrieb **nicht optional**: Backend- und Frontend-Code stecken im Image, ein bloßes `up -d` oder `restart` startet weiterhin den alten Stand. Dasselbe gilt für geänderte `VITE_*`-Werte in der `.env` (siehe [Betriebsarten](#betriebsarten)).
+   - Nur im Entwicklungs-Stack (`docker-compose.dev.yml`) werden reine Code-Änderungen durch Bind-Mount und `--reload` sofort übernommen; **neue Migrationen und geänderte Abhängigkeiten** (`requirements.txt`, `package.json`) greifen aber auch dort erst nach `up -d --build`.
 4. **Prüfen:**
    ```bash
    docker compose ps           # alle Dienste "Up"/"healthy"?
@@ -176,13 +232,15 @@ zcat backups/db-<zeitstempel>.sql.gz | docker compose exec -T postgres psql -U "
 
 ### Add-ons & Versionen
 
-Die **Business-** und **Enterprise-Add-ons** haben **eigene Releases** (getrennt vom Core). In einer Produktions­installation sind sie Teil des Backend-Images — der Rebuild oben aktualisiert sie mit. Im Entwickler-Setup (per Volume gemountet) werden sie separat per `git pull` in ihren Repos aktualisiert, gefolgt von `docker compose restart backend`.
+Die **Business-** und **Enterprise-Add-ons** haben **eigene Releases** (getrennt vom Core). In einer Produktions­installation sind sie Teil des Backend-Images — der Rebuild oben aktualisiert sie mit.
 
 ## Add-ons & Backend-Neustart
 
-Die kostenpflichtigen **Business-** und **Enterprise-Add-ons** werden als separate Pakete in den `backend`-Container eingehängt (per Volume nach `/addons/…`) und beim Start des Backends automatisch geladen.
+Die kostenpflichtigen **Business-** und **Enterprise-Add-ons** sind eigene Python-Pakete, die im Backend-Image installiert sind und beim Start automatisch geladen werden. Welche Funktionen davon freigeschaltet sind, entscheidet die Lizenz — nicht die Installation.
 
-> ⚠️ **Wichtig bei Add-on-Änderungen:** Das Backend läuft mit uvicorn `--reload`, das aber **nur das App-Verzeichnis** überwacht — **nicht** die eingehängten Add-on-Pakete. Änderungen am Code der Add-ons (neue Routen, Felder usw.) werden daher erst nach einem manuellen Neustart des Backends aktiv:
+Im Regelbetrieb gibt es dabei nichts zu tun: `docker compose up -d --build` baut das Backend-Image neu und startet den Container, die Add-ons kommen dabei auf den aktuellen Stand.
+
+> ⚠️ **Nur im Entwicklungs-Stack:** Sind die Add-on-Repos per Volume in den Container gemountet, überwacht uvicorn `--reload` **nur das App-Verzeichnis** — **nicht** die eingehängten Pakete. Änderungen am Add-on-Code (neue Routen, Felder usw.) werden daher erst nach einem manuellen Neustart aktiv:
 >
 > ```bash
 > docker compose restart backend

@@ -17,6 +17,14 @@ docker compose up -d
 
 This recreates the affected containers with the new values. A plain `restart` does not pick up changed environment variables — a frequent reason a change "doesn't apply".
 
+**Exception: `VITE_*`** (`VITE_API_URL`, `VITE_WIKI_URL`, `VITE_SUPPORT_EMAIL`): Vite bakes these values into the delivered frontend files at **build** time. In production mode `up -d` is not enough, the frontend has to be rebuilt:
+
+```bash
+docker compose build frontend && docker compose up -d
+```
+
+Symptom: the new support address or wiki URL is in `.env`, but the dashboard still shows the old one. This does not happen in the development stack (`docker-compose.dev.yml`) — there the dev server reads the values at runtime.
+
 ## Dashboard unreachable / redirect loop (behind a reverse proxy)
 
 **Symptom:** The dashboard won't load; the upstream reverse proxy receives a **308 redirect** from Caddy (often to the server IP, e.g. `https://10.x.x.x/`), sometimes with certificate errors in the Caddy logs (`could not get certificate … forbidden by policy`).
@@ -50,7 +58,7 @@ APP_DOMAIN=phish.example.com
 WEBAUTHN_ORIGIN=https://phish.example.com
 ```
 
-Then `docker compose up -d` (not just `restart` — see above). `APP_DOMAIN` is also used for Vite's `allowedHosts`, the Host header forwarded to the frontend, and the tracking links; it should always match the actually reachable domain.
+Then `docker compose up -d` (not just `restart` — see above). `APP_DOMAIN` is also used for the Host header forwarded to the frontend and for the tracking links (and, in the development stack, for Vite's `allowedHosts`); it should always match the actually reachable domain.
 
 > ⚠️ **Existing passkeys are bound to the RP ID they were created with.** If `APP_DOMAIN` (= RP ID) changes, existing passkeys must be **re-registered** (under **My Profile**). Signing in via backup code or password remains possible.
 
@@ -86,9 +94,15 @@ Do **not** delete the data volume to "fix" this — that would discard all campa
 
 **Symptom:** The frontend calls a new Business/Enterprise feature and gets an HTTP 404 / a generic error.
 
-**Cause:** uvicorn `--reload` only watches the app directory, **not** the mounted add-on packages.
+**Cause:** The running container still has the old code. In production mode the entire backend code including the add-ons lives in the image — a `git pull` alone changes nothing there. In the development stack, uvicorn `--reload` only watches the app directory, **not** the mounted add-on packages.
 
-**Fix:**
+**Fix** in production mode — rebuild the image:
+
+```bash
+docker compose up -d --build backend
+```
+
+In the development stack a restart is enough:
 
 ```bash
 docker compose restart backend

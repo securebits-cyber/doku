@@ -40,7 +40,7 @@ The entire stack (PostgreSQL, Redis, FastAPI backend, frontend, Caddy) runs on *
 | `postgres` | Database |
 | `redis` | Cache/queue |
 | `backend` | API (FastAPI) |
-| `frontend` | Dashboard (React/Vite) |
+| `frontend` | Dashboard (React/Vite), served as pre-built static files in regular operation |
 | `caddy` | Reverse proxy / TLS |
 
 ## Guided install (recommended)
@@ -88,6 +88,48 @@ The routine only writes to `.env` (mode `600`) — nothing is hard-wired in the 
 4. Database migrations run automatically when the backend starts.
 5. Open the dashboard via the configured domain (or `https://localhost`).
 
+## Operating modes
+
+`docker compose up -d` starts **production mode**. That is the default and the right choice for every real installation:
+
+- The frontend is compiled to static files at build time and served from the container by a lightweight web server — there is **no** Vite dev server.
+- Neither the backend nor the frontend port is published on the host. The stack is reachable exclusively through `caddy` (80/443).
+- Source code is **not** mounted into the containers and the backend runs without `--reload`. Code changes only take effect after a rebuild (see [Update](#update)).
+
+For **development**, add `docker-compose.dev.yml` — Vite with hot reload, `uvicorn --reload`, source code as a bind mount and the directly published ports 5173 (dashboard) and 8000 (API):
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+More convenient permanently via `.env` — after that plain `docker compose up -d` keeps working:
+
+```ini title=".env"
+COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml
+```
+
+> ⚠️ **The development stack does not belong on a machine reachable from the internet.** The Vite dev server serves the entire frontend source unauthenticated and reports every server-side load error via HMR WebSocket to **all** connected browsers — including errors triggered by a stranger's port scanner. That is why ports 5173/8000 only listen on `127.0.0.1`. `DEV_BIND_ADDRESS` exists only for the case where another machine on a trusted network needs access — never put a publicly reachable address there.
+
+### Frontend values are baked in at build time
+
+Vite bakes the `VITE_*` values into the delivered frontend files at **build** time. In production mode a change in `.env` therefore only takes effect **after rebuilding the frontend**:
+
+```bash
+docker compose build frontend && docker compose up -d
+```
+
+In the development stack the dev server reads the same values at runtime; there `docker compose up -d` is enough.
+
+### Which interfaces the dashboard answers on
+
+Without further configuration `caddy` listens on **all** network interfaces of the machine (`0.0.0.0`). On a server with a public IP that means: reachable from the internet — even if access was only ever meant to happen via VPN. `FRONTEND_BIND_ADDRESS` narrows this down to **one** interface; put that interface's IP address there (`ip -4 addr show` lists them), e.g. the VPN/overlay interface:
+
+```ini title=".env"
+FRONTEND_BIND_ADDRESS=100.64.0.5
+```
+
+> ⚠️ Do **not** put `127.0.0.1` here: the dashboard would then only answer locally on the server itself and become unreachable via VPN as well.
+
 ## Important `.env` values (generic)
 
 ```ini title=".env"
@@ -115,6 +157,14 @@ SMTP_PASSWORD=change-me
 SMTP_FROM_EMAIL=noreply@example.com
 SMTP_FROM_NAME=SentryMail
 SMTP_TLS_MODE=starttls
+
+# Frontend (only takes effect after "docker compose build frontend")
+VITE_API_URL=/api                          # default; differs only in the dev stack
+# VITE_WIKI_URL=https://wiki.example.com   # empty = official docs
+# VITE_SUPPORT_EMAIL=support@example.com   # empty = support@sentrymail.de
+
+# Network (optional)
+# FRONTEND_BIND_ADDRESS=100.64.0.5         # serve this interface only
 ```
 
 ## First login
@@ -148,6 +198,11 @@ If you prefer to run the steps individually:
    mkdir -p backups
    docker compose exec -T postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" | gzip > backups/db-$(date +%Y%m%d-%H%M%S).sql.gz
    ```
+   > 💡 The dump contains the database, **not** the files written by the backend. If you store training videos locally (`LMS_STORAGE_BACKEND=filesystem`, Enterprise), back up the `backend_data` volume as well:
+   >
+   > ```bash
+   > docker compose exec -T backend tar -cz -C /app/data . > backups/backend-data-$(date +%Y%m%d-%H%M%S).tar.gz
+   > ```
 2. **Update the code:**
    ```bash
    git pull                       # latest state of the current branch
@@ -157,7 +212,8 @@ If you prefer to run the steps individually:
    ```bash
    docker compose up -d --build
    ```
-   - Pure core code changes are picked up immediately via the mounted volume + uvicorn `--reload`, but **new migrations and changed dependencies** (`requirements.txt`, `package.json`) only take effect after `up -d --build`, or at least `docker compose restart backend`.
+   - In production mode `--build` is **not optional**: backend and frontend code live in the image, a plain `up -d` or `restart` keeps running the old state. The same applies to changed `VITE_*` values in `.env` (see [Operating modes](#operating-modes)).
+   - Only in the development stack (`docker-compose.dev.yml`) are pure code changes picked up immediately via bind mount and `--reload`; **new migrations and changed dependencies** (`requirements.txt`, `package.json`) still require `up -d --build` there as well.
 4. **Verify:**
    ```bash
    docker compose ps           # all services "Up"/"healthy"?
@@ -176,13 +232,15 @@ zcat backups/db-<timestamp>.sql.gz | docker compose exec -T postgres psql -U "$P
 
 ### Add-ons & versions
 
-The **Business** and **Enterprise add-ons** have **their own releases** (separate from the core). In a production install they are part of the backend image — the rebuild above updates them too. In the developer setup (mounted via volume) they are updated separately via `git pull` in their repos, followed by `docker compose restart backend`.
+The **Business** and **Enterprise add-ons** have **their own releases** (separate from the core). In a production install they are part of the backend image — the rebuild above updates them too.
 
 ## Add-ons & backend restart
 
-The paid **Business** and **Enterprise add-ons** are mounted into the `backend` container as separate packages (via volume to `/addons/…`) and loaded automatically when the backend starts.
+The paid **Business** and **Enterprise add-ons** are separate Python packages installed in the backend image and loaded automatically on start. Which of their features are unlocked is decided by the licence, not by the installation.
 
-> ⚠️ **Important for add-on changes:** The backend runs with uvicorn `--reload`, which only watches **the app directory** — **not** the mounted add-on packages. Changes to add-on code (new routes, fields, etc.) therefore only take effect after a manual backend restart:
+In regular operation there is nothing to do: `docker compose up -d --build` rebuilds the backend image and restarts the container, bringing the add-ons up to date along with it.
+
+> ⚠️ **Development stack only:** If the add-on repos are mounted into the container via volume, uvicorn `--reload` only watches **the app directory** — **not** the mounted packages. Changes to add-on code (new routes, fields, etc.) therefore only take effect after a manual backend restart:
 >
 > ```bash
 > docker compose restart backend
