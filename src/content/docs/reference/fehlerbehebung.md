@@ -17,6 +17,14 @@ docker compose up -d
 
 Das erzeugt betroffene Container mit den neuen Werten neu. Ein reiner `restart` übernimmt geänderte Umgebungsvariablen nicht — ein häufiger Grund, warum eine Anpassung „nicht wirkt".
 
+**Ausnahme `VITE_*`** (`VITE_API_URL`, `VITE_WIKI_URL`, `VITE_SUPPORT_EMAIL`): Diese Werte setzt Vite beim **Bauen** fest in die ausgelieferten Frontend-Dateien ein. Im Produktionsbetrieb reicht `up -d` dafür nicht, das Frontend muss neu gebaut werden:
+
+```bash
+docker compose build frontend && docker compose up -d
+```
+
+Symptom: Die neue Support-Adresse oder Wiki-URL steht in der `.env`, das Dashboard zeigt aber weiterhin die alte. Im Entwicklungs-Stack (`docker-compose.dev.yml`) tritt das nicht auf — dort liest der Devserver die Werte zur Laufzeit.
+
 ## Dashboard nicht erreichbar / Weiterleitungsschleife (hinter Reverse Proxy)
 
 **Symptom:** Das Dashboard lädt nicht; der vorgelagerte Reverse Proxy erhält von Caddy eine **308-Weiterleitung** (oft auf die Server-IP wie `https://10.x.x.x/`), teils Zertifikatsfehler in den Caddy-Logs (`could not get certificate … forbidden by policy`).
@@ -50,7 +58,7 @@ APP_DOMAIN=phish.example.com
 WEBAUTHN_ORIGIN=https://phish.example.com
 ```
 
-Danach `docker compose up -d` (nicht nur `restart` — siehe oben). `APP_DOMAIN` wird zugleich für Vites `allowedHosts`, den Host-Header ans Frontend und die Tracking-Links verwendet; es sollte immer der real erreichbaren Domain entsprechen.
+Danach `docker compose up -d` (nicht nur `restart` — siehe oben). `APP_DOMAIN` wird zugleich für den Host-Header ans Frontend und die Tracking-Links verwendet (im Entwicklungs-Stack zusätzlich für Vites `allowedHosts`); es sollte immer der real erreichbaren Domain entsprechen.
 
 > ⚠️ **Bestehende Passkeys sind an die RP-ID gebunden, mit der sie erstellt wurden.** Ändert sich `APP_DOMAIN` (= RP-ID), müssen vorhandene Passkeys **neu registriert** werden (unter **Mein Profil**). Die Anmeldung per Backup-Code oder Passwort bleibt möglich.
 
@@ -86,9 +94,15 @@ Das Daten-Volume **nicht** löschen, um das Problem zu „lösen" — das würde
 
 **Symptom:** Das Frontend ruft eine neue Business-/Enterprise-Funktion auf, es kommt ein HTTP 404 / eine generische Fehlermeldung.
 
-**Ursache:** uvicorn `--reload` überwacht nur das App-Verzeichnis, **nicht** die gemounteten Add-on-Pakete.
+**Ursache:** Der laufende Container hat noch den alten Code. Im Produktionsbetrieb steckt der gesamte Backend-Code inklusive der Add-ons im Image — ein `git pull` allein ändert daran nichts. Im Entwicklungs-Stack überwacht uvicorn `--reload` nur das App-Verzeichnis, **nicht** die gemounteten Add-on-Pakete.
 
-**Lösung:**
+**Lösung** im Produktionsbetrieb — Image neu bauen:
+
+```bash
+docker compose up -d --build backend
+```
+
+Im Entwicklungs-Stack genügt ein Neustart:
 
 ```bash
 docker compose restart backend
