@@ -1,9 +1,12 @@
 ---
-title: "Funktionen"
-description: "Vorlagen, Gruppen, Kampagnen, Tracking sowie Business- und Enterprise-Add-ons im Überblick."
+title: "Funktionen im Überblick"
+description: "Alle Funktionen von HumanShield.APP: Phishing-Vorlagen, Gruppen, Landing Pages, Kampagnen, Tracking, Human Risk Management und die Add-ons."
 sidebar:
+  label: "Funktionen"
   order: 1
 ---
+
+Was HumanShield.APP kann — vom Erstellen einer Phishing-Vorlage bis zur personenbezogenen Risiko-Auswertung. Der **Open-Core-Kern** (MPL-2.0) enthält alles, was für vollständige Awareness-Kampagnen nötig ist; die kostenpflichtigen [Business-](#business-edition-add-on) und [Enterprise-Add-ons](#enterprise-edition-add-on) ergänzen Automatisierung, Reporting und Unternehmens-Integrationen.
 
 ## Vorlagen (Templates)
 

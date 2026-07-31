@@ -1,9 +1,12 @@
 ---
-title: "Roadmap"
-description: "Implemented feature set and planned extensions."
+title: "Roadmap and feature status"
+description: "What is already implemented in HumanShield.APP – open-core, Business and Enterprise add-on – and which extensions are being considered for future releases."
 sidebar:
+  label: "Roadmap"
   order: 7
 ---
+
+This page separates the **current feature status** from what is still outstanding, so it is clear what you can rely on today before rolling the platform out. For a detailed description of each feature see [Features](/en/reference/funktionen/).
 
 The documented feature set is implemented: the **open-core** and the paid **Business** and **Enterprise add-ons** are available. See [Features](/en/reference/funktionen/) for the full list.
 

@@ -1,11 +1,12 @@
 ---
-title: "Troubleshooting"
-description: "Common operational problems and how to solve them."
+title: "Troubleshooting common problems"
+description: "Fixes for typical issues: .env changes not applying, redirect loops behind a reverse proxy, failing passkey sign-in and 404s after an update."
 sidebar:
+  label: "Troubleshooting"
   order: 6
 ---
 
-Common operational problems and their fixes. See also [Configuration](/en/guides/konfiguration/) and [Installation](/en/guides/installation/).
+Symptoms, causes and fixes for the problems that come up most often in operation, each with a command to verify it. For setup see [Configuration](/en/guides/konfiguration/) and [Installation](/en/guides/installation/); for general questions see the [FAQ](/en/reference/faq/).
 
 ## `.env` changes have no effect
 

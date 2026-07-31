@@ -1,11 +1,14 @@
 ---
-title: "Configuration"
-description: "Configure login, SSO, 2FA, SMTP, LDAP, GeoIP and the audit log."
+title: "Configuration: SSO, 2FA and SMTP"
+description: "Set up HumanShield.APP: local login, OIDC and SAML single sign-on, two-factor authentication, SMTP delivery, LDAP import, GeoIP and the audit log."
 sidebar:
+  label: "Configuration"
   order: 2
 ---
 
-Most configuration is done via the dashboard under **Settings** (admin-only). Operator secrets (app `SECRET_KEY`, DB password) stay in the `.env`.
+Most configuration is done via the dashboard under **Settings** (admin-only); only the operator secrets (app `SECRET_KEY`, DB password) stay in the `.env`. This assumes a running stack — see [Installation](/en/guides/installation/).
+
+On this page: [sign-in](#sign-in) (local, OIDC, SAML) · [2FA](#two-factor-authentication-2fa) · [SMTP](#smtp) · [LDAP](#ldap) · [PDF reports](#pdf-reports-logo-and-company-data-business) · [GeoIP](#geoip--country-statistics-optional) · [audit log](#activity--audit-log).
 
 ## Sign-in
 

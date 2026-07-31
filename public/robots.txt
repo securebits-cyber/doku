@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# Pagefind-Suchindex: Binaerfragmente ohne eigenstaendigen Inhalt.
+Disallow: /pagefind/
+
 Sitemap: https://docs.humanshield.app/sitemap-index.xml

@@ -1,11 +1,14 @@
 ---
-title: "Installation"
-description: "HumanShield.APP mit Docker Compose installieren, aktualisieren und betreiben."
+title: "Installation mit Docker Compose"
+description: "HumanShield.APP auf dem eigenen Server installieren: Voraussetzungen, Hardware-Anforderungen, geführte Installation per install.sh, Update und Rollback."
 sidebar:
+  label: "Installation"
   order: 1
 ---
 
-HumanShield.APP wird als Docker-Compose-Stack betrieben. Alle umgebungs­spezifischen Werte kommen aus einer `.env` — es sind **keine** Werte im Code fest verdrahtet.
+HumanShield.APP wird als Docker-Compose-Stack auf **einem** Linux-Host betrieben — On-Premise oder beim Hoster deiner Wahl. Alle umgebungs­spezifischen Werte kommen aus einer `.env`; es sind **keine** Werte im Code fest verdrahtet.
+
+Diese Seite führt vom leeren Server bis zum ersten Login: [Voraussetzungen](#voraussetzungen) und [Hardware](#hardware-anforderungen) prüfen, den Stack per [geführter Installation](#geführte-installation-empfohlen) oder [manuell](#schnellstart-manuell) starten und später [aktualisieren](#update--aktualisierung). Anschließend geht es weiter mit der [Konfiguration](/guides/konfiguration/).
 
 ## Voraussetzungen
 

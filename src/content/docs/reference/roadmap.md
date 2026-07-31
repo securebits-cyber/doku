@@ -1,9 +1,12 @@
 ---
-title: "Roadmap"
-description: "Umgesetzter Funktionsumfang und geplante Erweiterungen."
+title: "Roadmap und Funktionsstand"
+description: "Was in HumanShield.APP bereits umgesetzt ist – Open-Core-Kern, Business- und Enterprise-Add-on – und welche Erweiterungen für kommende Versionen angedacht sind."
 sidebar:
+  label: "Roadmap"
   order: 7
 ---
+
+Diese Seite trennt den **aktuellen Funktionsstand** von dem, was noch aussteht — damit vor einer Einführung klar ist, worauf man sich heute verlassen kann. Eine ausführliche Beschreibung jeder Funktion steht unter [Funktionen](/reference/funktionen/).
 
 Der dokumentierte Funktionsumfang ist umgesetzt: der **Open-Core-Kern** sowie die kostenpflichtigen **Business-** und **Enterprise-Add-ons** sind verfügbar. Die vollständige Auflistung findest du unter [Funktionen](/reference/funktionen/).
 

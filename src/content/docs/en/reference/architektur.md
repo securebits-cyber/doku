@@ -1,9 +1,12 @@
 ---
-title: "Architecture"
-description: "Technical structure: stack, routing, concepts and data model."
+title: "Architecture and tech stack"
+description: "How HumanShield.APP is built: FastAPI backend, React frontend, PostgreSQL, Redis and Caddy as reverse proxy – plus routing, tracking tokens and the data model."
 sidebar:
+  label: "Architecture"
   order: 2
 ---
+
+HumanShield.APP is a Docker Compose stack of five services: Caddy terminates TLS and routes requests, a FastAPI backend holds the logic and the tracking endpoints, a React frontend serves the dashboard, PostgreSQL stores the data and Redis provides cache and queue. This page describes that structure for operators who need to assess, harden or integrate the stack.
 
 ## Stack
 

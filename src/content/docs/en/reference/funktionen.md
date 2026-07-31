@@ -1,9 +1,12 @@
 ---
-title: "Features"
-description: "Templates, groups, campaigns, tracking and the Business and Enterprise add-ons at a glance."
+title: "Features at a glance"
+description: "Every HumanShield.APP feature: phishing templates, groups, landing pages, campaigns, tracking, human risk management and the paid add-ons."
 sidebar:
+  label: "Features"
   order: 1
 ---
+
+What HumanShield.APP does — from building a phishing template to per-person risk scoring. The **open-core** (MPL-2.0) covers everything needed to run complete awareness campaigns; the paid [Business](#business-edition-add-on) and [Enterprise](#enterprise-edition-add-on) add-ons layer on automation, reporting and enterprise integrations.
 
 ## Templates
 

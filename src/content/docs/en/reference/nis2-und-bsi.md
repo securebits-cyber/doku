@@ -1,11 +1,12 @@
 ---
-title: "NIS2 and BSI"
-description: "How HumanShield.APP supports awareness requirements from NIS2 and BSI IT-Grundschutz."
+title: "NIS2 and BSI IT-Grundschutz"
+description: "Phishing simulations as awareness evidence: how HumanShield.APP supports the training duties in NIS2 (Art. 21) and BSI building block ORP.3."
 sidebar:
+  label: "NIS2 and BSI"
   order: 4
 ---
 
-How HumanShield.APP supports awareness requirements from **NIS2** and the **BSI IT-Grundschutz**.
+**NIS2** obliges affected entities to practise cyber hygiene and provide training; the **BSI IT-Grundschutz** requires awareness and training in building block ORP.3. Both call for measures that happen regularly, can be measured and can be documented. That is exactly where phishing simulations fit — this page sets out what HumanShield.APP contributes and where the limits are.
 
 > **Note:** This page is an overview, **not legal advice** and not an automatic proof of "compliance". What is binding is your internal risk analysis, your ISMS and, where applicable, legal counsel.
 

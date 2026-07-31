@@ -1,11 +1,12 @@
 ---
-title: "Fehlerbehebung"
-description: "Häufige Probleme im Betrieb und ihre Lösung."
+title: "Fehlerbehebung und Troubleshooting"
+description: "Lösungen für typische Probleme: .env-Änderungen greifen nicht, Weiterleitungsschleife hinter dem Reverse Proxy, Passkey-Fehler, 404 nach Update."
 sidebar:
+  label: "Fehlerbehebung"
   order: 6
 ---
 
-Häufige Probleme im Betrieb und ihre Lösung. Siehe auch [Konfiguration](/guides/konfiguration/) und [Installation](/guides/installation/).
+Symptome, Ursachen und Lösungen für die Probleme, die im Betrieb am häufigsten auftreten — jeweils mit Prüfbefehl. Zur Einrichtung siehe [Konfiguration](/guides/konfiguration/) und [Installation](/guides/installation/); allgemeine Verständnisfragen beantwortet die [FAQ](/reference/faq/).
 
 ## `.env`-Änderungen greifen nicht
 

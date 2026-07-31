@@ -1,11 +1,12 @@
 ---
-title: "Security"
-description: "Security mechanisms of HumanShield.APP and recommendations for operation."
+title: "Security and hardening"
+description: "How HumanShield.APP protects accounts and data: Argon2id, two-factor authentication, encrypted secrets, audit log and hardening advice."
 sidebar:
+  label: "Security"
   order: 3
 ---
 
-Overview of HumanShield.APP's security mechanisms and recommendations for operation.
+A phishing simulation inevitably handles sensitive data — recipient lists, SMTP credentials and behavioural data about employees. This page covers the protections HumanShield.APP ships with and how to harden your deployment further.
 
 ## Authentication
 

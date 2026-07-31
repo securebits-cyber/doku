@@ -1,9 +1,12 @@
 ---
-title: "FAQ"
-description: "Frequently asked questions about HumanShield.APP."
+title: "FAQ – frequently asked questions"
+description: "Common questions about HumanShield.APP: tracking and data protection, missing opens and clicks, SMTP providers, SSO, 2FA and recipient import."
 sidebar:
+  label: "FAQ"
   order: 5
 ---
+
+Short answers to the questions that come up most often before and during operation. For technical faults see [Troubleshooting](/en/reference/fehlerbehebung/); for the setup path see [Configuration](/en/guides/konfiguration/).
 
 **What is HumanShield.APP?**
 A self-hosted open-core platform for phishing awareness: plan, send and evaluate simulated phishing campaigns per recipient.
