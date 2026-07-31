@@ -1,7 +1,8 @@
 ---
-title: "Reporting & analysis"
-description: "Report suspicious emails, analyse them automatically and group them into waves."
+title: "Reporting and analysing suspicious mail"
+description: "Submit suspicious emails via the report button, have them analysed automatically – with ClamAV, YARA and MISP – and grouped into attack waves."
 sidebar:
+  label: "Reporting & analysis"
   order: 5
 ---
 

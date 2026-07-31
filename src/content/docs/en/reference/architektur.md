@@ -1,7 +1,8 @@
 ---
-title: "Architecture"
-description: "Technical structure: stack, routing, concepts and data model."
+title: "Architecture and tech stack"
+description: "How SentryMail is built: FastAPI backend, React frontend, PostgreSQL, Redis and Caddy – plus routing, tracking tokens and the data model."
 sidebar:
+  label: "Architecture"
   order: 2
 ---
 

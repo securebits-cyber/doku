@@ -2,6 +2,7 @@
 title: "Training module (LMS)"
 description: "Set up self-hosted mandatory video training: video storage, automatic assignment, comprehension quizzes, deadlines and audit-proof certificates."
 sidebar:
+  label: "Training module"
   order: 5
 ---
 
@@ -128,7 +129,7 @@ Whatever happened **before** you switched it on is not sent retrospectively: a q
 ## Certificates & records
 
 - After passing a course, the LMS generates an **audit-proof training record** as a PDF with an **integrity hash** to prevent forgery.
-- Logo and company data from **Settings → PDF reports** are embedded as a header (see [Configuration → PDF reports](/en/guides/konfiguration/#pdf-reports-logo-and-company-data-business)).
+- Logo and company data from **Settings → PDF reports** are embedded as a header (see [Configuration → PDF reports](/en/guides/konfiguration/#pdf-reports-logo-and-company-data)).
 - Certificates and training records remain accessible **even after the Enterprise license expires** — auditability is not lost.
 - Progress and certificate status appear in the **enterprise reporting** and can be exported as **CSV**; the **evidence center** provides the matching compliance documents ([Features](/en/reference/funktionen/#business-edition-add-on)).
 

@@ -1,7 +1,8 @@
 ---
-title: "Other channels"
-description: "Simulations by SMS, Matrix, Nextcloud Talk and as planted media."
+title: "Other channels: SMS, chat, USB"
+description: "Simulations beyond email: by SMS through your own gateway, via Matrix and Nextcloud Talk, and as a planted USB drive."
 sidebar:
+  label: "Other channels"
   order: 6
 ---
 

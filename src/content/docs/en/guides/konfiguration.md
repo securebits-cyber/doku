@@ -1,7 +1,8 @@
 ---
-title: "Configuration"
-description: "Set up every option: sign-in, SSO, SMTP, directories, add-on features and interfaces."
+title: "Configuration: SSO, SMTP and 2FA"
+description: "Set up every option: sign-in and SSO, two-factor authentication, SMTP delivery, directory services, add-on features and interfaces."
 sidebar:
+  label: "Configuration"
   order: 2
 ---
 Most configuration is done via the dashboard under **Settings** (admin-only). Operator secrets (app `SECRET_KEY`, DB password) stay in the `.env`.

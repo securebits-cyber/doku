@@ -1,7 +1,8 @@
 ---
-title: "FAQ"
-description: "Frequently asked questions about SentryMail."
+title: "FAQ – frequently asked questions"
+description: "Common questions about SentryMail: data protection and co-determination, missing opens and clicks, SMTP providers, SSO, 2FA and recipient import."
 sidebar:
+  label: "FAQ"
   order: 7
 ---
 

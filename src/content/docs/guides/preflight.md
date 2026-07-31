@@ -1,7 +1,8 @@
 ---
-title: "Kampagnen-Preflight"
-description: "Regeln für den Kampagnenstart festlegen, den Pflichtdialog verstehen und die Vier-Augen-Freigabe nutzen."
+title: "Kampagnen-Preflight und Freigabe"
+description: "Regeln für den Kampagnenstart festlegen, Köder-Themen nach Risiko einstufen, den Pflichtdialog verstehen und per Vier-Augen-Prinzip freigeben."
 sidebar:
+  label: "Preflight"
   order: 4
 ---
 

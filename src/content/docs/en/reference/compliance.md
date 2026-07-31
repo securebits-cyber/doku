@@ -1,7 +1,8 @@
 ---
-title: "Compliance mapping"
+title: "Compliance: NIS2, BSI, GDPR, ISO"
 description: "How SentryMail supports requirements from NIS2, BSI IT-Grundschutz, the GDPR and ISO/IEC 27001 — and where the limits are."
 sidebar:
+  label: "Compliance"
   order: 6
 ---
 

@@ -1,7 +1,8 @@
 ---
-title: "Features"
-description: "Templates, groups, campaigns, tracking and the Business and Enterprise add-ons at a glance."
+title: "Features at a glance"
+description: "Every SentryMail feature: templates, groups, landing pages, campaigns, tracking and human risk management, plus the paid add-ons."
 sidebar:
+  label: "Features"
   order: 1
 ---
 
@@ -107,8 +108,6 @@ In detail: [Data protection & co-determination](/en/reference/datenschutz/)
 
 - **Signed offline update bundles** for air-gapped instances without internet access: an Ed25519 signature over the raw manifest bytes, SHA-256 per file, completeness checked in **both** directions, plus `min_version` and a downgrade block. Nothing is waved through on a failed check, and the bundles build **reproducibly**.
 - A `.env` inside a bundle is **actively rejected**, not merely excluded — an update must never overwrite the instance's configuration.
-
-Details: [Offline updates](/en/guides/offline-updates/)
 
 ## Business edition (add-on)
 

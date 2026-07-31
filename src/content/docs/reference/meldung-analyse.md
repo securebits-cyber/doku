@@ -1,7 +1,8 @@
 ---
-title: "Meldung & Analyse"
-description: "Verdächtige E-Mails melden, automatisch auswerten und zu Wellen zusammenfassen."
+title: "Meldung und Analyse verdächtiger Mails"
+description: "Verdächtige E-Mails per Melde-Button einreichen, automatisch auswerten lassen – mit ClamAV, YARA und MISP – und zu Angriffswellen zusammenfassen."
 sidebar:
+  label: "Meldung & Analyse"
   order: 5
 ---
 

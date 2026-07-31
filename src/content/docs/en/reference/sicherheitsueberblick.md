@@ -1,6 +1,6 @@
 ---
 title: "Security overview"
-description: "How SentryMail handles credentials, personal data and third-party content — and how that is verified."
+description: "How SentryMail handles credentials, personal data and third-party content — and how those safeguards are verified and documented."
 sidebar:
   order: 4
 ---

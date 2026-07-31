@@ -1,7 +1,8 @@
 ---
-title: "Konfiguration"
-description: "Alle Einstellungen einrichten: Anmeldung, SSO, SMTP, Verzeichnisse, Add-on-Funktionen und Schnittstellen."
+title: "Konfiguration: SSO, SMTP und 2FA"
+description: "Alle Einstellungen einrichten: Anmeldung und SSO, Zwei-Faktor, SMTP-Versand, Verzeichnisdienste, Add-on-Funktionen und Schnittstellen."
 sidebar:
+  label: "Konfiguration"
   order: 2
 ---
 Ein Großteil der Konfiguration läuft über das Dashboard unter **Einstellungen** (admin-only). Betreiber-Secrets (App-`SECRET_KEY`, DB-Passwort) bleiben in der `.env`.

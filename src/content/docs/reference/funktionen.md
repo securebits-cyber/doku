@@ -1,7 +1,8 @@
 ---
-title: "Funktionen"
-description: "Vorlagen, Gruppen, Kampagnen, Tracking sowie Business- und Enterprise-Add-ons im Überblick."
+title: "Funktionen im Überblick"
+description: "Alle Funktionen von SentryMail: Vorlagen, Gruppen, Landing Pages, Kampagnen, Tracking und Human Risk Management sowie die kostenpflichtigen Add-ons."
 sidebar:
+  label: "Funktionen"
   order: 1
 ---
 
@@ -107,8 +108,6 @@ Ausführlich: [Datenschutz & Mitbestimmung](/reference/datenschutz/)
 
 - **Signierte Offline-Update-Bundles** für abgeschottete Instanzen ohne Internetzugang: Ed25519-Signatur über die rohen Manifest-Bytes, SHA-256 je Datei, Vollständigkeitsprüfung in **beide** Richtungen sowie `min_version` und Downgrade-Sperre. Kein Durchwinken bei fehlgeschlagener Prüfung; die Bundles sind **reproduzierbar** baubar.
 - Eine `.env` im Bundle wird **erzwungen abgewiesen**, nicht nur ausgeschlossen — ein Update darf die Konfiguration der Instanz nie überschreiben.
-
-Details: [Offline-Updates](/guides/offline-updates/)
 
 ## Business-Edition (Add-on)
 

@@ -1,7 +1,8 @@
 ---
-title: "Delivery"
+title: "Delivery and allowlisting"
 description: "Generate allowlisting for the mail gateway, verify delivery before a campaign starts, and diagnose delivery problems."
 sidebar:
+  label: "Delivery"
   order: 3
 ---
 

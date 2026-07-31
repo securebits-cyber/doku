@@ -1,7 +1,8 @@
 ---
-title: "Roadmap"
-description: "Umgesetzter Funktionsumfang und geplante Erweiterungen."
+title: "Roadmap und Funktionsstand"
+description: "Was in SentryMail bereits umgesetzt ist – Open-Core-Kern, Business- und Enterprise-Add-on – und welche Erweiterungen noch angedacht sind."
 sidebar:
+  label: "Roadmap"
   order: 9
 ---
 

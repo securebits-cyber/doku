@@ -1,7 +1,8 @@
 ---
-title: "Compliance-Einordnung"
+title: "Compliance: NIS2, BSI, DSGVO, ISO"
 description: "Wie SentryMail Anforderungen aus NIS2, BSI IT-Grundschutz, DSGVO und ISO/IEC 27001 unterstützt — und wo die Grenzen liegen."
 sidebar:
+  label: "Compliance"
   order: 6
 ---
 

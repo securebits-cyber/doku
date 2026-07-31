@@ -1,7 +1,8 @@
 ---
-title: "Evidence chain"
-description: "Hash chaining for the audit log, evidence package and independent verification without SentryMail."
+title: "Evidence chain and audit log"
+description: "Hash chaining of the audit log, the exportable evidence package and independent verification of the chain without SentryMail installed."
 sidebar:
+  label: "Evidence chain"
   order: 5
 ---
 

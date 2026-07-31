@@ -1,7 +1,8 @@
 ---
-title: "Troubleshooting"
-description: "Common operational problems and how to solve them."
+title: "Troubleshooting common problems"
+description: "Fixes for typical issues: .env changes not applying, redirect loops behind a reverse proxy, failing passkey sign-in and 404s after an update."
 sidebar:
+  label: "Troubleshooting"
   order: 8
 ---
 
