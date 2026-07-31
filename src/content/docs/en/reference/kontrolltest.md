@@ -2,6 +2,7 @@
 title: "Control effectiveness test"
 description: "Measure which protective layer of your own mail infrastructure catches what — with harmless payloads against a dedicated test mailbox."
 sidebar:
+  label: "Control test"
   order: 7
 ---
 

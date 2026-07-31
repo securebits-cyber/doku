@@ -1,7 +1,8 @@
 ---
-title: "Nachweiskette"
-description: "Hash-Verkettung des Audit-Logs, Nachweispaket und unabhängige Prüfung ohne SentryMail."
+title: "Nachweiskette und Audit-Log"
+description: "Hash-Verkettung des Audit-Logs, das exportierbare Nachweispaket und die unabhängige Prüfung der Kette ohne installiertes SentryMail."
 sidebar:
+  label: "Nachweiskette"
   order: 5
 ---
 

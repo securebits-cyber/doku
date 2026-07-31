@@ -1,7 +1,8 @@
 ---
-title: "Weitere Kanäle"
-description: "Simulationen per SMS, Matrix, Nextcloud Talk und als ausgelegter Datenträger."
+title: "Weitere Kanäle: SMS, Chat, USB"
+description: "Simulationen jenseits von E-Mail: per SMS über ein eigenes Gateway, über Matrix und Nextcloud Talk sowie als ausgelegter USB-Datenträger."
 sidebar:
+  label: "Weitere Kanäle"
   order: 6
 ---
 

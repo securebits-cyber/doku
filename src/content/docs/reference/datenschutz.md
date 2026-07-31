@@ -2,6 +2,7 @@
 title: "Datenschutz & Mitbestimmung"
 description: "Der Datenschutz- und Mitbestimmungsmodus: Sperre für Einzelpersonen-Auswertungen, k-Anonymität, Vier-Augen-Freigabe und automatische Anonymisierung."
 sidebar:
+  label: "Datenschutz"
   order: 4
 ---
 

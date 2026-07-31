@@ -1,7 +1,8 @@
 ---
-title: "Campaign preflight"
-description: "Define the rules for starting a campaign, understand the mandatory dialog, and use four-eyes approval."
+title: "Campaign preflight and approval"
+description: "Define the rules for starting a campaign, rate lure topics by risk, understand the mandatory dialog and approve with four eyes."
 sidebar:
+  label: "Preflight"
   order: 4
 ---
 

@@ -1,7 +1,8 @@
 ---
-title: "Security"
-description: "Security mechanisms of SentryMail and recommendations for operation."
+title: "Security and hardening"
+description: "How SentryMail protects accounts and data: Argon2id, two-factor authentication, encrypted secrets, audit log and hardening recommendations."
 sidebar:
+  label: "Security"
   order: 3
 ---
 

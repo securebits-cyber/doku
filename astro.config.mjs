@@ -38,6 +38,8 @@ export default defineConfig({
 					SiteTitle: './src/components/SiteTitle.astro',
 					Footer: './src/components/Footer.astro',
 				},
+				// Ergaenzt og:image, Robots-Direktiven und JSON-LD (siehe Datei).
+				routeMiddleware: './src/starlightRouteData.ts',
 				plugins: [starlightVideos(), starlightScrollToTop()],
 				social: [
 					{ icon: 'github', label: 'GitHub', href: 'https://github.com/securebits-cyber' },

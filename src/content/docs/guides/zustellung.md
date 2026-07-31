@@ -1,7 +1,8 @@
 ---
-title: "Zustellung"
+title: "Zustellung und Allowlisting"
 description: "Allowlisting für das Mail-Gateway erzeugen, Zustellung vor dem Kampagnenstart prüfen und Zustellprobleme diagnostizieren."
 sidebar:
+  label: "Zustellung"
   order: 3
 ---
 

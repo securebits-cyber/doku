@@ -1,7 +1,8 @@
 ---
-title: "FAQ"
-description: "Häufig gestellte Fragen zu SentryMail."
+title: "FAQ – häufige Fragen"
+description: "Häufige Fragen zu SentryMail: Datenschutz und Mitbestimmung, fehlende Öffnungen und Klicks, SMTP-Anbieter, SSO, Zwei-Faktor und Empfänger-Import."
 sidebar:
+  label: "FAQ"
   order: 7
 ---
 

@@ -1,7 +1,8 @@
 ---
-title: "Fehlerbehebung"
-description: "Häufige Probleme im Betrieb und ihre Lösung."
+title: "Fehlerbehebung und Troubleshooting"
+description: "Lösungen für typische Probleme: .env-Änderungen greifen nicht, Weiterleitungsschleife hinter dem Reverse Proxy, Passkey-Fehler und 404 nach Update."
 sidebar:
+  label: "Fehlerbehebung"
   order: 8
 ---
 

@@ -1,7 +1,8 @@
 ---
-title: "Installation"
-description: "SentryMail mit Docker Compose installieren, aktualisieren und betreiben."
+title: "Installation mit Docker Compose"
+description: "SentryMail auf dem eigenen Server installieren: Voraussetzungen, Hardware, geführte Installation, Betriebsarten sowie Update und Rollback."
 sidebar:
+  label: "Installation"
   order: 1
 ---
 

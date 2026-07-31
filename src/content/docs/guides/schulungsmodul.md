@@ -2,6 +2,7 @@
 title: "Schulungsmodul (LMS)"
 description: "Selbstgehostete Pflichtschulungen mit Videos einrichten: Videospeicher, automatische Zuweisung, Verständnis-Quiz, Fristen und revisionssichere Zertifikate."
 sidebar:
+  label: "Schulungsmodul"
   order: 5
 ---
 
@@ -128,7 +129,7 @@ Was **vor** dem Einschalten passiert ist, wird nicht nachträglich verschickt: E
 ## Zertifikate & Nachweise
 
 - Nach bestandenem Kurs erzeugt das LMS einen **revisionssicheren Schulungs-Nachweis** als PDF mit **Integritäts-Hash** zur Fälschungssicherung.
-- Logo und Firmendaten aus **Einstellungen → PDF-Reports** werden als Kopf eingebettet (siehe [Konfiguration → PDF-Reports](/guides/konfiguration/#pdf-reports-logo-und-firmendaten-business)).
+- Logo und Firmendaten aus **Einstellungen → PDF-Reports** werden als Kopf eingebettet (siehe [Konfiguration → PDF-Reports](/guides/konfiguration/#pdf-reports-logo-und-firmendaten)).
 - Zertifikate und Schulungsnachweise bleiben **auch nach Ablauf der Enterprise-Lizenz** abrufbar — Audit-Fähigkeit geht nicht verloren.
 - Fortschritt und Zertifikatsstatus erscheinen im **Enterprise-Reporting** und lassen sich per **CSV** exportieren; das **Nachweis-Center** liefert die passenden Compliance-Dokumente ([Funktionen](/reference/funktionen/#business-edition-add-on)).
 

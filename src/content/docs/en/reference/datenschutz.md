@@ -2,6 +2,7 @@
 title: "Data protection & co-determination"
 description: "The data protection and co-determination mode: lock on individual-person evaluations, k-anonymity, four-eyes unlocking and automatic anonymisation."
 sidebar:
+  label: "Data protection"
   order: 4
 ---
 

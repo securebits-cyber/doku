@@ -2,6 +2,7 @@
 title: "Kontroll-Wirksamkeitstest"
 description: "Messen, welche Schutzschicht der eigenen Mailinfrastruktur was fängt — mit harmlosen Payloads gegen ein dediziertes Testpostfach."
 sidebar:
+  label: "Kontrolltest"
   order: 7
 ---
 
