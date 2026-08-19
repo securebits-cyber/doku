@@ -233,13 +233,20 @@ zcat backups/db-<zeitstempel>.sql.gz | docker compose exec -T postgres psql -U "
 
 ### Add-ons & Versionen
 
-Die **Business-** und **Enterprise-Add-ons** haben **eigene Releases** (getrennt vom Core). In einer Produktions­installation sind sie Teil des Backend-Images — der Rebuild oben aktualisiert sie mit.
+Die **Business-** und **Enterprise-Add-ons** haben **eigene Releases** (getrennt vom Core) und sind **nicht** Teil des Backend-Images. Sie werden beim Start des Backends bezogen — über den Lizenzserver, anhand deines Lizenzschlüssels. Der Neustart nach dem Update holt dabei automatisch die jeweils neueste freigeschaltete Fassung. Einzelheiten unter [Lizenz & Add-ons](/guides/lizenz/).
 
 ## Add-ons & Backend-Neustart
 
-Die kostenpflichtigen **Business-** und **Enterprise-Add-ons** sind eigene Python-Pakete, die im Backend-Image installiert sind und beim Start automatisch geladen werden. Welche Funktionen davon freigeschaltet sind, entscheidet die Lizenz — nicht die Installation.
+Die kostenpflichtigen **Business-** und **Enterprise-Add-ons** sind eigene Python-Pakete. Sie stecken **nicht** im Backend-Image, sondern werden bei jedem Start des Containers bezogen: Das Backend legt seinen Lizenzschlüssel beim Lizenzserver vor, dieser prüft die Berechtigung, lädt das Paket und reicht es durch. Deine Installation braucht dafür **keine** Zugangsdaten zu einer Paketquelle.
 
-Im Regelbetrieb gibt es dabei nichts zu tun: `docker compose up -d --build` baut das Backend-Image neu und startet den Container, die Add-ons kommen dabei auf den aktuellen Stand.
+Im Regelbetrieb gibt es dabei nichts zu tun: `docker compose up -d --build` startet den Container neu, und der Bezug läuft dabei mit. Ist die installierte Fassung bereits die aktuelle, wird nichts übertragen.
+
+Zwei Punkte, die dir Fehlersuche ersparen:
+
+- **Ohne Lizenzschlüssel passiert nichts** — die Installation startet im Open-Core-Umfang. Das ist kein Fehler, sondern der Regelfall bei einer Installation ohne Add-on.
+- **Ein fehlgeschlagener Bezug hält den Start nicht auf.** Ist der Lizenzserver nicht erreichbar, startet SentryMail trotzdem und vermerkt es im Protokoll. Prüfen mit `docker compose logs backend | grep -i addons`.
+
+Welche Funktionen freigeschaltet sind, entscheidet die Lizenz — nicht die Installation. Kauf, Aktivierung und Fehlerbehebung stehen unter [Lizenz & Add-ons](/guides/lizenz/).
 
 > ⚠️ **Nur im Entwicklungs-Stack:** Sind die Add-on-Repos per Volume in den Container gemountet, überwacht uvicorn `--reload` **nur das App-Verzeichnis** — **nicht** die eingehängten Pakete. Änderungen am Add-on-Code (neue Routen, Felder usw.) werden daher erst nach einem manuellen Neustart aktiv:
 >
