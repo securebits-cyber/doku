@@ -233,13 +233,20 @@ zcat backups/db-<timestamp>.sql.gz | docker compose exec -T postgres psql -U "$P
 
 ### Add-ons & versions
 
-The **Business** and **Enterprise add-ons** have **their own releases** (separate from the core). In a production install they are part of the backend image — the rebuild above updates them too.
+The **Business** and **Enterprise add-ons** have **their own releases** (separate from the core) and are **not** part of the backend image. They are fetched when the backend starts — through the license server, based on your license key. The restart after an update automatically pulls the latest entitled version. Details under [License & add-ons](/en/guides/lizenz/).
 
 ## Add-ons & backend restart
 
-The paid **Business** and **Enterprise add-ons** are separate Python packages installed in the backend image and loaded automatically on start. Which of their features are unlocked is decided by the licence, not by the installation.
+The paid **Business** and **Enterprise add-ons** are separate Python packages. They are **not** baked into the backend image; they are fetched every time the container starts: the backend presents its license key to the license server, which checks the entitlement, downloads the package and streams it through. Your installation needs **no** credentials for any package source.
 
-In regular operation there is nothing to do: `docker compose up -d --build` rebuilds the backend image and restarts the container, bringing the add-ons up to date along with it.
+In regular operation there is nothing to do: `docker compose up -d --build` restarts the container and the fetch runs along with it. If the installed version is already current, nothing is transferred.
+
+Two points that save you troubleshooting:
+
+- **Without a license key nothing happens** — the installation starts with the open-core scope. That is not an error, it is the normal case for an installation without an add-on.
+- **A failed fetch does not block startup.** If the license server is unreachable, SentryMail starts anyway and notes it in the log. Check with `docker compose logs backend | grep -i addons`.
+
+Which features are unlocked is decided by the license, not by the installation. Purchase, activation and troubleshooting are covered under [License & add-ons](/en/guides/lizenz/).
 
 > ⚠️ **Development stack only:** If the add-on repos are mounted into the container via volume, uvicorn `--reload` only watches **the app directory** — **not** the mounted packages. Changes to add-on code (new routes, fields, etc.) therefore only take effect after a manual backend restart:
 >
