@@ -19,7 +19,7 @@
     "starlight-plugin-icons": "^1.1.6",
     "starlight-scroll-to-top": "^1.0.1",
     "starlight-videos": "^0.5.0",
-    "unocss": "^66.8.1"
+    "unocss": "^66.10.0"
   },
   "devDependencies": {
     "@iconify-json/material-icon-theme": "^1.2.70",
