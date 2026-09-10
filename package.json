@@ -17,7 +17,7 @@
     "mermaid": "^11.17.2",
     "sharp": "^0.35.3",
     "starlight-plugin-icons": "^1.1.6",
-    "starlight-scroll-to-top": "^1.0.1",
+    "starlight-scroll-to-top": "^2.0.0",
     "starlight-videos": "^0.5.0",
     "unocss": "^66.8.1"
   },
