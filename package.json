@@ -11,8 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.42.5",
-    "astro": "^7.3.5",
+    "@astrojs/starlight": "^0.42.6",
+    "astro": "^7.3.8",
     "astro-mermaid": "^2.1.0",
     "mermaid": "^12.1.0",
     "sharp": "^0.35.3",
@@ -22,7 +22,7 @@
     "unocss": "^66.11.0"
   },
   "devDependencies": {
-    "@iconify-json/material-icon-theme": "^1.2.70",
+    "@iconify-json/material-icon-theme": "^1.2.72",
     "@iconify-json/ph": "^1.2.2",
     "@unocss/astro": "^66.10.5"
   }
