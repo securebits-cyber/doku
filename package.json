@@ -15,7 +15,7 @@
     "astro": "^7.4.4",
     "astro-mermaid": "^2.2.0",
     "mermaid": "^12.2.0",
-    "satteri": "^0.10.5",
+    "satteri": "^0.11.6",
     "sharp": "^0.35.3",
     "starlight-plugin-icons": "^1.1.6",
     "starlight-scroll-to-top": "^2.0.0",
