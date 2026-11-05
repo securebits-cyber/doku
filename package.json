@@ -25,6 +25,6 @@
   "devDependencies": {
     "@iconify-json/material-icon-theme": "^1.2.72",
     "@iconify-json/ph": "^1.2.2",
-    "@unocss/astro": "^66.10.5"
+    "@unocss/astro": "^66.12.0"
   }
 }
